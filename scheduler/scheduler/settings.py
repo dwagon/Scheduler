@@ -122,7 +122,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'scheduler.client',
+    'south',
+    'client'
 )
 
 # A sample logging configuration. The only tangible logging
