@@ -6,7 +6,7 @@ class Client(models.Model):
     name=models.CharField(max_length=200)
     regularity=models.IntegerField()
     dayofweek=models.SmallIntegerField(choices=DOW_CHOICES)
-    note=models.ForeignKey('Notes')
+    note=models.ForeignKey('Notes', null=True, blank=True)
 
 class Gap(models.Model):
     start=models.DateField()
