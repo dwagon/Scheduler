@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url
 
 from .views import ClientDetail, ClientUpdate, ClientList, ClientDelete
 from .views import ClientNew, index, viewCalendar, generateVisits
+from .views import initialiseCalendar
 
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
@@ -12,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/delete$', ClientDelete.as_view(), name='clientDelete'),
     url(r'^viewCalendar$', viewCalendar, name='viewCalendar'),
     url(r'^generateVisits$', generateVisits, name='generateVisits'),
+    url(r'^initialiseCalendar$', initialiseCalendar, name='initialiseCalendar'),
     )
