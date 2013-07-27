@@ -1,0 +1,18 @@
+<table border="1">
+<tr><td colspan="2">{% block topbar %} {% endblock %}</td></tr>
+<tr>
+<td width=10% valign="top">
+{% block sidebar %}
+<a href="{% url 'newClient' %}">New Client</a><br>
+<a href="{% url 'listClients' %}">Existing Clients</a><br>
+<a href="{% url 'viewCalendar' %}">View Calendar</a><br>
+<a href="{% url 'generateVisits' %}">Generate Visits</a><br>
+{% endblock %}
+</td><td>
+{% block content %}
+ContentBlock
+{% endblock %}
+</td>
+</tr>
+<tr><td colspan="2">{{debug}}</td></tr>
+</table>
