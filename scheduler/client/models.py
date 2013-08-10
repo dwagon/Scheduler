@@ -2,7 +2,7 @@ from django.db import models
 import sys
 import datetime
 
-DOW_CHOICES=((0,'Sunday'), (1,'Monday'), (2,'Tuesday'), (3,'Wednesday'), (4,'Thursday'), (5,'Friday'), (6,'Saturday'), (7,'Anyday'))
+DOW_CHOICES=((0,'Monday'), (1,'Tuesday'), (2,'Wednesday'), (3,'Thursday'), (4,'Friday'), (5,'Saturday'), (6,'Sunday'), (7,'Anyday'))
 DUR_CHOICES=((0,'Unknown'), (1,'Hour'), (2,'1/4 Day'), (3,'1/3 Day'), (4, '1/2 Day'), (8,'Full Day'))
 
 ################################################################################
@@ -39,7 +39,10 @@ class Gap(models.Model):
 class Visit(models.Model):
     client=models.ForeignKey(Client)
     date=models.ForeignKey('Day')
-    note=models.ForeignKey('Notes')
+    note=models.ForeignKey('Notes', null=True, blank=True)
+
+    class Meta:
+        unique_together=(("client", "date"))
 
 ################################################################################
 ################################################################################
@@ -53,7 +56,11 @@ class Notes(models.Model):
 class Day(models.Model):
     date=models.DateField(unique=True)
     dayofweek=models.SmallIntegerField(choices=DOW_CHOICES)
-    unfilled=models.SmallIntegerField()
+    unfilled=models.SmallIntegerField(default=8)
+
+    def save(self):
+        self.dayofweek=self.date.isoweekday()
+        super(Day,self).save()
 
 ################################################################################
 def inGap(d):
@@ -66,21 +73,22 @@ def inGap(d):
 ################################################################################
 def makeVisits(client, startDate, endDate):
     d=startDate
+    sys.stderr.write("Making visists for %s\n" % client.name)
     while d<endDate:
         if inGap(d):
             continue
-        # TODO - make this bit
-        d+=datetime.timedelta(days=1)
+        if d.isoweekday()==client.dayofweek or client.dayofweek==7:
+            day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
+            v=Visit(client=client, date=Day.objects.get(date=d))
+            v.save()
+            d+=datetime.timedelta(days=7*client.regularity)
+        else:
+            d+=datetime.timedelta(days=1)
 
 ################################################################################
 def initialiseDays(startDate, endDate):
     d=startDate
     while d<endDate:
-        try:
-            day=Day.objects.get(date=d)
-        except Day.DoesNotExist:
-            day=Day(date=d, dayofweek=d.isoweekday(), unfilled=8)
-            day.save()
-        else:
+        day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
         d+=datetime.timedelta(days=1)
 #EOF
