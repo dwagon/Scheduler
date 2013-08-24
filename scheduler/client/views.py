@@ -3,7 +3,7 @@ import datetime
 import calendar
 
 from django.http import HttpResponse
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -20,6 +20,12 @@ class ClientList(generic.ListView):
 ################################################################################
 class ClientDetail(generic.DetailView):
     model = Client
+
+    def get_context_data(self, **kwargs):
+        context = super(Client, self).get_context_data(**kwargs)
+        sys.stderr.write("kwargs=%s\n" % kwargs)
+        #context['visits'] = Visit.objects.filter(client=)
+        return context
 
 ################################################################################
 class ClientUpdate(UpdateView):
@@ -44,13 +50,19 @@ def index(request):
     return render(request, template_name, context)
 
 ################################################################################
-def generateVisits(request):
+def generateVisits(request, pk):
     from .models import makeVisits
     start=datetime.date(2013,1,1)
     end=datetime.date(2013,12,31)
     c=Client.objects.get(pk=pk)
     makeVisits(c,start,end)
-    return render(request, "client/index.html", {})
+    return redirect("displayThisMonth")
+
+################################################################################
+def clearAllVisits(request):
+    from .models import clearVisits
+    clearVisits()
+    return redirect("displayThisMonth")
 
 ################################################################################
 def generateAllVisits(request):

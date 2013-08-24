@@ -16,8 +16,8 @@ class Client(models.Model):
     note=models.ForeignKey('Notes', null=True, blank=True)
 
     ############################################################################
-    def populateVisits(self):
-        pass
+    def __str__(self):
+        return "%s" % self.name
 
 ################################################################################
 ################################################################################
@@ -41,6 +41,9 @@ class Visit(models.Model):
     date=models.ForeignKey('Day')
     note=models.ForeignKey('Notes', null=True, blank=True)
 
+    def __str__(self):
+        return "Visit %s on %s" % (self.client, self.date)
+
     class Meta:
         unique_together=(("client", "date"))
 
@@ -58,9 +61,12 @@ class Day(models.Model):
     dayofweek=models.SmallIntegerField(choices=DOW_CHOICES)
     unfilled=models.SmallIntegerField(default=8)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.dayofweek=self.date.isoweekday()
-        super(Day,self).save()
+        super(Day,self).save(*args, **kwargs)
+
+    def __str__(self):
+        return "%s" % self.date
 
 ################################################################################
 def inGap(d):
@@ -81,9 +87,16 @@ def makeVisits(client, startDate, endDate):
             day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
             v=Visit(client=client, date=Day.objects.get(date=d))
             v.save()
+            sys.stderr.write("    Visit on %s\n" % day)
             d+=datetime.timedelta(days=7*client.regularity)
         else:
             d+=datetime.timedelta(days=1)
+
+################################################################################
+def clearVisits():
+    allvisits=Visit.objects.all()
+    for v in allvisits[:]:
+        v.delete()
 
 ################################################################################
 def initialiseDays(startDate, endDate):
