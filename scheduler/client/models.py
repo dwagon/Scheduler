@@ -62,11 +62,17 @@ class Day(models.Model):
     unfilled=models.SmallIntegerField(default=8)
 
     def save(self, *args, **kwargs):
-        self.dayofweek=self.date.isoweekday()
+        self.dayofweek=self.date.weekday()
         super(Day,self).save(*args, **kwargs)
 
     def __str__(self):
         return "%s" % self.date
+
+################################################################################
+def isWeekend(d):
+    if d.weekday() in (5,6):
+        return True
+    return False
 
 ################################################################################
 def inGap(d):
@@ -78,24 +84,35 @@ def inGap(d):
 
 ################################################################################
 def makeVisits(client, startDate, endDate):
-    d=startDate
-    sys.stderr.write("Making visists for %s\n" % client.name)
+    d=startDate-datetime.timedelta(days=1)
+    sys.stderr.write("Calculating for %s\n" % client.name)
     while d<endDate:
+        d+=datetime.timedelta(days=1)
         if inGap(d):
             continue
-        if d.isoweekday()==client.dayofweek or client.dayofweek==7:
+        if isWeekend(d):
+            continue
+        sys.stderr.write("Looking at %s\n" % d)
+        if d.weekday()==client.dayofweek or client.dayofweek==7:
             day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
-            v=Visit(client=client, date=Day.objects.get(date=d))
-            v.save()
-            sys.stderr.write("    Visit on %s\n" % day)
-            d+=datetime.timedelta(days=7*client.regularity)
-        else:
-            d+=datetime.timedelta(days=1)
+            sys.stderr.write("unfilled=%d duration=%d\n" % (day.unfilled, client.duration))
+            if day.unfilled>client.duration:
+                v=Visit(client=client, date=Day.objects.get(date=d))
+                v.save()
+                day.unfilled-=client.duration
+                day.save()
+                d+=datetime.timedelta(days=7*client.regularity)
+                sys.stderr.write("Visit created in %s\n" % day)
+                continue
+            else:
+                sys.stderr.write("Can't fit in %s\n" % day)
 
 ################################################################################
 def clearVisits():
     allvisits=Visit.objects.all()
     for v in allvisits[:]:
+        v.date.unfilled+=v.client.duration
+        v.date.save()
         v.delete()
 
 ################################################################################

@@ -3,7 +3,7 @@ import datetime
 import calendar
 
 from django.http import HttpResponse
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -22,9 +22,9 @@ class ClientDetail(generic.DetailView):
     model = Client
 
     def get_context_data(self, **kwargs):
-        context = super(Client, self).get_context_data(**kwargs)
-        sys.stderr.write("kwargs=%s\n" % kwargs)
-        #context['visits'] = Visit.objects.filter(client=)
+        self.client = get_object_or_404(Client, pk=self.kwargs['pk'])
+        context = super(ClientDetail, self).get_context_data(**kwargs)
+        context['visits'] = Visit.objects.filter(client=self.client)
         return context
 
 ################################################################################
@@ -76,7 +76,7 @@ def generateAllVisits(request):
 
 ################################################################################
 def displayDay(request, year=None, month=None, day=None):
-    pass
+    return redirect("displayThisMonth")
 
 ################################################################################
 def displayMonth(request, year=None, month=None, change=None):
@@ -100,7 +100,7 @@ def displayMonth(request, year=None, month=None, change=None):
             mod = -mdelta
         year, month = (now+mod).timetuple()[:2]
 
-    cal = calendar.Calendar(6)
+    cal = calendar.Calendar()
     lst = [[]]
     week = 0
 

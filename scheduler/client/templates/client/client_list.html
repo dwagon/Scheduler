@@ -2,7 +2,7 @@
 {% block content %}
 <ul>
 {% for client in client_list %}
-<li><a href="{% url 'detailClient' client.id %}">{{ client.name }}</a></li>
+    <li><a href="{% url 'detailClient' client.id %}">{{ client.name }}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}
