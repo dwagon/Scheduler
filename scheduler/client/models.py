@@ -38,6 +38,7 @@ class Gap(models.Model):
 ################################################################################
 class Visit(models.Model):
     client=models.ForeignKey(Client)
+    good=models.BooleanField(default=True)
     date=models.ForeignKey('Day')
     note=models.ForeignKey('Notes', null=True, blank=True)
 
@@ -92,28 +93,27 @@ def makeVisits(client, startDate, endDate):
             continue
         if isWeekend(d):
             continue
-        sys.stderr.write("Looking at %s\n" % d)
         if d.weekday()==client.dayofweek or client.dayofweek==7:
             day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
-            sys.stderr.write("unfilled=%d duration=%d\n" % (day.unfilled, client.duration))
-            if day.unfilled>client.duration:
+            if day.unfilled>=client.duration:
                 v=Visit(client=client, date=Day.objects.get(date=d))
                 v.save()
                 day.unfilled-=client.duration
+                if day.unfilled:
+                    day.unfilled-=1 # Time to have lunch, travel etc
                 day.save()
                 d+=datetime.timedelta(days=7*client.regularity)
-                sys.stderr.write("Visit created in %s\n" % day)
                 continue
             else:
-                sys.stderr.write("Can't fit in %s\n" % day)
+                v=Visit(client=client, date=Day.objects.get(date=d), good=False)
+                v.save()
 
 ################################################################################
 def clearVisits():
-    allvisits=Visit.objects.all()
-    for v in allvisits[:]:
-        v.date.unfilled+=v.client.duration
-        v.date.save()
+    for v in Visit.objects.all():
         v.delete()
+    for d in Day.objects.all():
+        d.delete()
 
 ################################################################################
 def initialiseDays(startDate, endDate):

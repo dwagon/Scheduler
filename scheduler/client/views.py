@@ -41,7 +41,9 @@ class ClientDelete(DeleteView):
 class ClientNew(CreateView):
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('listClients')
+
+    def get_success_url(self): 
+        return reverse_lazy('detailClient', pk=self.object.id)
 
 ################################################################################
 def index(request):
@@ -55,8 +57,8 @@ def generateVisits(request, pk):
     start=datetime.date(2013,1,1)
     end=datetime.date(2013,12,31)
     c=Client.objects.get(pk=pk)
-    makeVisits(c,start,end)
-    return redirect("displayThisMonth")
+    missed=makeVisits(c,start,end)
+    return redirect("detailClient", pk=pk)
 
 ################################################################################
 def clearAllVisits(request):
@@ -110,6 +112,7 @@ def displayMonth(request, year=None, month=None, change=None):
         current = False
         visits = None
         gap = False
+        d = None
         if day:
             dt=datetime.date(year, month, day)
             if dt==today:
@@ -119,7 +122,7 @@ def displayMonth(request, year=None, month=None, change=None):
                 gap = True
             visits=Visit.objects.filter(date=d)
 
-        lst[week].append((day, visits, current, gap))
+        lst[week].append((day, visits, current, gap, d))
         if len(lst[week]) == 7:
             lst.append([])
             week += 1
