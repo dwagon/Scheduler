@@ -35,21 +35,15 @@
         <!-- Day number and entry snippets -->
         {% if day != 0 %}
         <table>
-            <tr valign="top"><td>{{ day }} [{{d.unfilled}} hrs left]</td></tr>
-            <tr><td><hr></td></tr>
-            {% for visit in visits %}
-                <tr><td>
-                {% if visit.good %}
+            <tr valign="top"><td>{{ day }}</td></tr>
+        {% for visit in visits %}
+            <tr><td>
+            <font color={% if visit.good %}"red"{% else %}"black"{%endif%}>
                 <a href="{% url "detailClient" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
                 {{ visit.client.get_duration_display }}
-                {% else %}
-                <font color="red">
-                <a href="{% url "detailClient" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
-                {{ visit.client.get_duration_display }}
-                </font>
-                {% endif %}
-                </td></tr>
-            {% endfor %}
+            </font>
+            </td></tr>
+        {% endfor %}
         </table>
         {% endif %}
         </td>

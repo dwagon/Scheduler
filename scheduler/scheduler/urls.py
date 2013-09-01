@@ -6,6 +6,7 @@ urlpatterns = patterns('',
     # Examples:
     #url(r'^$', 'scheduler.views.home', name='home'),
     url(r'^client/', include('client.urls')),
+    url(r'^visit/', include('visit.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
