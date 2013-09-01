@@ -48,11 +48,17 @@ class Day(models.Model):
     unfilled=models.SmallIntegerField(default=8)
 
     def save(self, *args, **kwargs):
-        self.dayofweek=self.date.isoweekday()
+        self.dayofweek=self.date.weekday()
         super(Day,self).save(*args, **kwargs)
 
     def __str__(self):
         return "%s" % self.date
+
+################################################################################
+def isWeekend(d):
+    if d.weekday() in (5,6):
+        return True
+    return False
 
 ################################################################################
 def inGap(d):

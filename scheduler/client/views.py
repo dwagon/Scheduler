@@ -3,7 +3,7 @@ import datetime
 import calendar
 
 from django.http import HttpResponse
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -44,7 +44,9 @@ class ClientDelete(DeleteView):
 class ClientNew(CreateView):
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('listClients')
+
+    def get_success_url(self): 
+        return reverse_lazy('detailClient', pk=self.object.id)
 
 ################################################################################
 def index(request):
@@ -57,12 +59,12 @@ def generateVisits(request, pk):
     start=datetime.date(2013,1,1)
     end=datetime.date(2013,12,31)
     c=Client.objects.get(pk=pk)
-    makeVisits(c,start,end)
-    return redirect("displayThisMonth")
+    missed=makeVisits(c,start,end)
+    return redirect("detailClient", pk=pk)
 
 ################################################################################
 def displayDay(request, year=None, month=None, day=None):
-    pass
+    return redirect("displayThisMonth")
 
 ################################################################################
 def displayMonth(request, year=None, month=None, change=None):
@@ -86,7 +88,7 @@ def displayMonth(request, year=None, month=None, change=None):
             mod = -mdelta
         year, month = (now+mod).timetuple()[:2]
 
-    cal = calendar.Calendar(6)
+    cal = calendar.Calendar()
     lst = [[]]
     week = 0
 
@@ -96,6 +98,7 @@ def displayMonth(request, year=None, month=None, change=None):
         current = False
         visits = None
         gap = False
+        d = None
         if day:
             dt=datetime.date(year, month, day)
             if dt==today:
@@ -105,7 +108,7 @@ def displayMonth(request, year=None, month=None, change=None):
                 gap = True
             visits=Visit.objects.filter(date=d)
 
-        lst[week].append((day, visits, current, gap))
+        lst[week].append((day, visits, current, gap, d))
         if len(lst[week]) == 7:
             lst.append([])
             week += 1
