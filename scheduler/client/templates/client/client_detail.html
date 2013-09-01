@@ -3,9 +3,9 @@
 <table border=1>
 {% include "client/client_view.html" %}
 <tr>
-<td colspan="1"><a href="{%url 'updateClient' client.id %}">Update</a></td>
+<td colspan="1"><a href="{%url 'updateClient' client.id %}">Update Details</a></td>
 <td colspan="1"><a href="{%url 'generateVisits' client.id %}">generateVisits</a></td>
-<td colspan="1"><a href="{%url 'clientDelete' client.id %}">Delete</a></td>
+<td colspan="1"><a href="{%url 'clientDelete' client.id %}">Delete Client</a></td>
 </tr>
 </table>
 {% endblock %}

@@ -36,20 +36,6 @@ class Gap(models.Model):
 ################################################################################
 ################################################################################
 ################################################################################
-class Visit(models.Model):
-    client=models.ForeignKey(Client)
-    date=models.ForeignKey('Day')
-    note=models.ForeignKey('Notes', null=True, blank=True)
-
-    def __str__(self):
-        return "Visit %s on %s" % (self.client, self.date)
-
-    class Meta:
-        unique_together=(("client", "date"))
-
-################################################################################
-################################################################################
-################################################################################
 class Notes(models.Model):
     note=models.CharField(max_length=250)
 
@@ -77,31 +63,10 @@ def inGap(d):
     return False
 
 ################################################################################
-def makeVisits(client, startDate, endDate):
-    d=startDate
-    sys.stderr.write("Making visists for %s\n" % client.name)
-    while d<endDate:
-        if inGap(d):
-            continue
-        if d.isoweekday()==client.dayofweek or client.dayofweek==7:
-            day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
-            v=Visit(client=client, date=Day.objects.get(date=d))
-            v.save()
-            sys.stderr.write("    Visit on %s\n" % day)
-            d+=datetime.timedelta(days=7*client.regularity)
-        else:
-            d+=datetime.timedelta(days=1)
-
-################################################################################
-def clearVisits():
-    allvisits=Visit.objects.all()
-    for v in allvisits[:]:
-        v.delete()
-
-################################################################################
 def initialiseDays(startDate, endDate):
     d=startDate
     while d<endDate:
         day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
         d+=datetime.timedelta(days=1)
+
 #EOF
