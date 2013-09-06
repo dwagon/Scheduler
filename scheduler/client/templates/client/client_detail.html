@@ -8,7 +8,7 @@
 <td colspan="1"><a href="{%url 'clientDelete' client.id %}">Delete Client</a></td>
 </tr>
 {% for visit in visits %}
-    {% include "client/visit_view.html" %}
+    {% include "visit/visit_view.html" %}
 {% endfor %}
 </table>
 {% endblock %}

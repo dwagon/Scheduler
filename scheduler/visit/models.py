@@ -19,13 +19,23 @@ class Visit(models.Model):
         unique_together=(("client", "date"))
 
 ################################################################################
+def inWeekend(day):
+    if day.weekday() in (5,6):
+        return True
+    return False
+
+################################################################################
 def makeVisits(client, startDate, endDate):
     d=startDate
+    d-=datetime.timedelta(days=1)
     sys.stderr.write("Making visists for %s\n" % client.name)
     while d<endDate:
+        d+=datetime.timedelta(days=1)
         if inGap(d):
             continue
-        if d.isoweekday()==client.dayofweek or client.dayofweek==7:
+        if inWeekend(d):
+            continue
+        if d.weekday()==client.dayofweek or client.dayofweek==7:
             day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
             if day.unfilled>=client.duration:
                 v=Visit(client=client, date=Day.objects.get(date=d))
@@ -33,18 +43,16 @@ def makeVisits(client, startDate, endDate):
                 day.unfilled-=client.duration
                 if day.unfilled:
                     day.unfilled-=1 # Time to have lunch, travel, etc
-                sys.stderr.write("    Visit on %s\n" % day)
+                day.save()
                 d+=datetime.timedelta(days=7*client.regularity)
+                sys.stderr.write("    Visit on %s\n" % day)
                 continue
             else:
-                sys.stderr.write("Couldn't fit %s into %s\n" % (client.name, day))
-                v=Visit(client=client, date=Day.objects.get(date=d), good=False)
-                v.save()
-            d+=datetime.timedelta(days=1)
+                d+=datetime.timedelta(days=7)
 
 ################################################################################
 def clearVisits():
-    for v in Visit.ibjects.all():
+    for v in Visit.objects.all():
         v.delete()
     for d in Day.objects.all():
         d.delete()

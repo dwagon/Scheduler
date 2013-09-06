@@ -53,7 +53,7 @@ def generateAllVisits(request):
     # Make this a form to get the start and end days
     from .models import makeVisits
     start=datetime.date(2013,1,1)
-    end=datetime.date(2013,12,31)
+    end=datetime.date(2014,12,31)
     for c in Client.objects.all():
         makeVisits(c,start,end)
     return render(request, "client/index.html", {})

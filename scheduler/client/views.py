@@ -27,6 +27,7 @@ class ClientDetail(generic.DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         sys.stderr.write("kwargs=%s\n" % kwargs)
+        sys.stderr.write("args=%s\n" % str(args))
         #context['visits'] = Visit.objects.filter(client=)
         return context
 
