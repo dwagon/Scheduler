@@ -7,6 +7,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
+from django.contrib import messages
 
 from .models import Visit
 from client.models import Client
@@ -55,7 +56,10 @@ def generateAllVisits(request):
     start=datetime.date(2013,1,1)
     end=datetime.date(2014,12,31)
     for c in Client.objects.all():
-        makeVisits(c,start,end)
+        msgs=makeVisits(c,start,end)
+        for msg in msgs:
+            messages.info(request,msg)
+            sys.stderr.write("msg=%s\n" % msg)
     return render(request, "client/index.html", {})
 
 ################################################################################

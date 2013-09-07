@@ -19,6 +19,14 @@ class Client(models.Model):
     def __str__(self):
         return "%s" % self.name
 
+    ############################################################################
+    def goodDay(self, d):
+        if self.dayofweek==7:
+            return True
+        if d.weekday()==self.dayofweek:
+            return True
+        return False
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -47,18 +55,26 @@ class Day(models.Model):
     dayofweek=models.SmallIntegerField(choices=DOW_CHOICES)
     unfilled=models.SmallIntegerField(default=8)
 
+    ############################################################################
     def save(self, *args, **kwargs):
         self.dayofweek=self.date.weekday()
         super(Day,self).save(*args, **kwargs)
 
+    ############################################################################
     def __str__(self):
         return "%s" % self.date
 
-################################################################################
-def isWeekend(d):
-    if d.weekday() in (5,6):
-        return True
-    return False
+    ############################################################################
+    def __sub__(self, a):
+        return self.date-a.date
+
+    ############################################################################
+    def canfit(self, duration):
+        return self.unfilled>=duration
+
+    ############################################################################
+    def isWeekend(self):
+        return self.date.weekday() in (5,6)
 
 ################################################################################
 def inGap(d):

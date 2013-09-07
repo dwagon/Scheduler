@@ -1,6 +1,8 @@
-from django.db import models
 import sys
 import datetime
+
+from django.db import models
+
 from client.models import Client, Notes, Day, inGap
 
 ################################################################################
@@ -19,36 +21,40 @@ class Visit(models.Model):
         unique_together=(("client", "date"))
 
 ################################################################################
-def inWeekend(day):
-    if day.weekday() in (5,6):
-        return True
-    return False
-
-################################################################################
 def makeVisits(client, startDate, endDate):
+    msgs=[]
     d=startDate
     d-=datetime.timedelta(days=1)
     sys.stderr.write("Making visists for %s\n" % client.name)
+    lastvisit=None
     while d<endDate:
         d+=datetime.timedelta(days=1)
+        day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
         if inGap(d):
             continue
-        if inWeekend(d):
+        if day.isWeekend():
             continue
-        if d.weekday()==client.dayofweek or client.dayofweek==7:
-            day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
-            if day.unfilled>=client.duration:
-                v=Visit(client=client, date=Day.objects.get(date=d))
-                v.save()
-                day.unfilled-=client.duration
-                if day.unfilled:
-                    day.unfilled-=1 # Time to have lunch, travel, etc
-                day.save()
-                d+=datetime.timedelta(days=7*client.regularity)
-                sys.stderr.write("    Visit on %s\n" % day)
-                continue
-            else:
-                d+=datetime.timedelta(days=7)
+        if not client.goodDay(d):
+            sys.stderr.write("%s is not a good day\n" % d)
+            continue
+        if day.canfit(client.duration):
+            v=Visit(client=client, date=Day.objects.get(date=d))
+            v.save()
+            if lastvisit:
+                delta=v.date-lastvisit.date
+                desired=datetime.timedelta(days=7*client.regularity)
+                if delta>desired:
+                    msgs.append("Visit delta %s instead of %s (%s, last %s)\n" % (delta, desired, v.date, lastvisit.date))
+                    v.good=False
+                    v.save()
+            lastvisit=v
+            day.unfilled-=client.duration
+            if day.unfilled:
+                day.unfilled-=1 # Time to have lunch, travel, etc
+            day.save()
+            d+=datetime.timedelta(days=7*client.regularity)
+            msgs.append("    Visit on %s\n" % day)
+    return msgs
 
 ################################################################################
 def clearVisits():

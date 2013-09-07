@@ -7,14 +7,13 @@ from django.shortcuts import render, render_to_response, redirect, get_object_or
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
+from django.contrib import messages
 
 from .models import Client, Day, inGap
 from visit.models import Visit, makeVisits
 from .forms import ClientForm
 
 mnames = "January February March April May June July August September October November December".split()
-sys.stderr.write("Visit=%s\n" % type(Visit))
-sys.stderr.write("Visit=%s\n" % dir(Visit))
 
 ################################################################################
 class ClientList(generic.ListView):
@@ -26,9 +25,7 @@ class ClientDetail(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        sys.stderr.write("kwargs=%s\n" % kwargs)
-        sys.stderr.write("args=%s\n" % str(args))
-        #context['visits'] = Visit.objects.filter(client=)
+        context['visits'] = Visit.objects.filter(client=kwargs['object'])
         return context
 
 ################################################################################
@@ -60,7 +57,9 @@ def generateVisits(request, pk):
     start=datetime.date(2013,1,1)
     end=datetime.date(2013,12,31)
     c=Client.objects.get(pk=pk)
-    missed=makeVisits(c,start,end)
+    msgs=makeVisits(c,start,end)
+    for msg in msgs:
+        messages.info(request, msg)
     return redirect("detailClient", pk=pk)
 
 ################################################################################
