@@ -1,4 +1,8 @@
-<table>
+<table
+onClick="parent.location='{% url "detailVisit" visit.id %}'"
+onMouseOver="this.bgColor='#eeeeee';"
+onMouseOut="this.bgColor='white';"
+>
 <tr>
 <td>Visit:</td>
 <td>Date: {{visit.date}} </td>
@@ -7,3 +11,4 @@
 </td>
 </tr>
 </table>
+
