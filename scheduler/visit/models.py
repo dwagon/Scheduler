@@ -21,12 +21,23 @@ class Visit(models.Model):
         unique_together=(("client", "date"))
 
 ################################################################################
+def newVisit(client, d):
+    v=Visit(client=client, date=Day.objects.get(date=d))
+    v.save()
+    day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
+    day.unfilled-=client.duration
+    if day.unfilled:
+        day.unfilled-=1 # Time to have lunch, travel, etc
+    day.save()
+    return v
+
+################################################################################
 def makeVisits(client, startDate, endDate):
     msgs=[]
     d=startDate
     d-=datetime.timedelta(days=1)
-    sys.stderr.write("Making visists for %s\n" % client.name)
-    lastvisit=None
+    sys.stderr.write("Making visists for %s (%s)\n" % (client.name, client.duration))
+    lastdate=None
     while d<endDate:
         d+=datetime.timedelta(days=1)
         day=Day.objects.get_or_create(date=d, defaults={'date':d})[0]
@@ -35,25 +46,18 @@ def makeVisits(client, startDate, endDate):
         if day.isWeekend():
             continue
         if not client.goodDay(d):
-            sys.stderr.write("%s is not a good day\n" % d)
+            continue
+        if lastdate and d-lastdate<datetime.timedelta(days=7*client.regularity):
             continue
         if day.canfit(client.duration):
-            v=Visit(client=client, date=Day.objects.get(date=d))
-            v.save()
-            if lastvisit:
-                delta=v.date-lastvisit.date
-                desired=datetime.timedelta(days=7*client.regularity)
-                if delta>desired:
-                    msgs.append("Visit delta %s instead of %s (%s, last %s)\n" % (delta, desired, v.date, lastvisit.date))
-                    v.good=False
-                    v.save()
-            lastvisit=v
-            day.unfilled-=client.duration
-            if day.unfilled:
-                day.unfilled-=1 # Time to have lunch, travel, etc
-            day.save()
-            d+=datetime.timedelta(days=7*client.regularity)
-            msgs.append("    Visit on %s\n" % day)
+            v=newVisit(client, d)
+            if lastdate and d-lastdate>datetime.timedelta(days=7*client.regularity):
+                v.good=False
+                v.save()
+                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (day, d-lastdate, datetime.timedelta(days=7*client.regularity)))
+            else:
+                msgs.append("Visit on %s\n" % day)
+            lastdate=v.date.date
     return msgs
 
 ################################################################################

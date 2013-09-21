@@ -55,11 +55,10 @@ def generateAllVisits(request):
     from .models import makeVisits
     start=datetime.date(2013,1,1)
     end=datetime.date(2014,12,31)
-    for c in Client.objects.all():
+    for c in Client.objects.all().order_by('-duration'):
         msgs=makeVisits(c,start,end)
         for msg in msgs:
             messages.info(request,msg)
-            sys.stderr.write("msg=%s\n" % msg)
     return render(request, "client/index.html", {})
 
 ################################################################################
