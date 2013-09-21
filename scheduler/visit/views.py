@@ -22,10 +22,8 @@ class VisitList(generic.ListView):
 class VisitDetail(generic.DetailView):
     model = Visit
 
-    def get_context_data(self, **kwargs):
-        context = super(Visit, self).get_context_data(**kwargs)
-        sys.stderr.write("kwargs=%s\n" % kwargs)
-        #context['visits'] = Visit.objects.filter(client=)
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
         return context
 
 ################################################################################
