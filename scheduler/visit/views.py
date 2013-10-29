@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
 from .models import Visit
+from .forms import VisitForm
 from client.models import Client
 
 mnames = "January February March April May June July August September October November December".split()
@@ -29,17 +30,20 @@ class VisitDetail(generic.DetailView):
 ################################################################################
 class VisitUpdate(UpdateView):
     model = Visit
-    success_url = reverse_lazy('listVisits')
+    form_class = VisitForm
+
+    def get_success_url(self):
+        return reverse_lazy('detailClient', kwargs={'pk':self.object.id})
 
 ################################################################################
 class VisitDelete(DeleteView):
     model = Visit
-    success_url = reverse_lazy('listVisits')
+    success_url = reverse_lazy('detailClient')
 
 ################################################################################
 class VisitNew(CreateView):
     model = Visit
-    success_url = reverse_lazy('listVisits')
+    success_url = reverse_lazy('detailClient')
 
 ################################################################################
 def clearAllVisits(request):
@@ -51,12 +55,12 @@ def clearAllVisits(request):
 def generateAllVisits(request):
     # Make this a form to get the start and end days
     from .models import makeVisits
-    start=datetime.date(2013,1,1)
-    end=datetime.date(2014,12,31)
+    start=datetime.date(2013, 1, 1)
+    end=datetime.date(2014, 12, 31)
     for c in Client.objects.all().order_by('-duration'):
-        msgs=makeVisits(c,start,end)
+        msgs=makeVisits(c, start, end)
         for msg in msgs:
-            messages.info(request,msg)
+            messages.info(request, msg)
     return render(request, "client/index.html", {})
 
 ################################################################################
