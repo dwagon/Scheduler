@@ -1,0 +1,6 @@
+Starting With Postgres
+======================
+
+ * Change the settings
+ * # createdb <DATABASE NAME>
+ * # createuser <DATABASE USER>
