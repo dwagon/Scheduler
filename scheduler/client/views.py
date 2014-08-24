@@ -59,8 +59,8 @@ def index(request):
 
 ################################################################################
 def generateVisits(request, pk):
-    start = datetime.date(2013, 1, 1)
-    end = datetime.date(2013, 12, 31)
+    start = datetime.date(2014, 1, 1)
+    end = datetime.date(2015, 12, 31)
     c = Client.objects.get(pk=pk)
     msgs = makeVisits(c, start, end)
     for msg in msgs:
