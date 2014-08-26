@@ -33,19 +33,21 @@ class VisitUpdate(UpdateView):
     form_class = VisitForm
 
     def get_success_url(self):
-        return reverse_lazy('detailClient', kwargs={'pk': self.object.id})
+        return reverse_lazy('detailVisit', kwargs={'pk': self.object.id})
 
 
 ################################################################################
 class VisitDelete(DeleteView):
     model = Visit
-    success_url = reverse_lazy('detailClient')
+
+    def get_success_url(self):
+        return reverse_lazy('detailClient', kwargs={'pk': self.object.client.id})
 
 
 ################################################################################
 class VisitNew(CreateView):
     model = Visit
-    success_url = reverse_lazy('detailClient')
+    success_url = reverse_lazy('detailVisit')
 
 
 ################################################################################
@@ -71,6 +73,5 @@ def generateAllVisits(request):
 ################################################################################
 def displayDay(request, year=None, month=None, day=None):
     pass
-
 
 # EOF
