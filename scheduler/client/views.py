@@ -47,7 +47,7 @@ class ClientNew(CreateView):
     form_class = ClientForm
 
     def get_success_url(self):
-        return reverse_lazy('detailClient', pk=self.object.id)
+        return reverse_lazy('detailClient', kwargs={'pk': self.object.id})
 
 
 ################################################################################
