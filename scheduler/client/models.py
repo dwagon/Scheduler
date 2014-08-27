@@ -51,49 +51,11 @@ class Notes(models.Model):
 
 
 ################################################################################
-################################################################################
-################################################################################
-class Day(models.Model):
-    date = models.DateField(unique=True)
-    dayofweek = models.SmallIntegerField(choices=DOW_CHOICES)
-    unfilled = models.SmallIntegerField(default=8)
-
-    ############################################################################
-    def save(self, *args, **kwargs):
-        self.dayofweek = self.date.weekday()
-        super(Day, self).save(*args, **kwargs)
-
-    ############################################################################
-    def __str__(self):
-        return "%s" % self.date
-
-    ############################################################################
-    def __sub__(self, a):
-        return self.date-a.date
-
-    ############################################################################
-    def canfit(self, duration):
-        return self.unfilled >= duration
-
-    ############################################################################
-    def isWeekend(self):
-        return self.date.weekday() in (5, 6)
-
-
-################################################################################
 def inGap(d):
     gaps = Gap.objects.all()
     for g in gaps:
         if d.inGap(d):
             return True
     return False
-
-
-################################################################################
-def initialiseDays(startDate, endDate):
-    d = startDate
-    while d < endDate:
-        day = Day.objects.get_or_create(date=d, defaults={'date': d})[0]
-        d += datetime.timedelta(days=1)
 
 # EOF

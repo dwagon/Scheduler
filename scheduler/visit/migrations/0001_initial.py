@@ -13,18 +13,18 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('client', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['client.Client'])),
             ('good', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('date', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['client.Day'])),
+            ('date', self.gf('django.db.models.fields.DateField')()),
             ('note', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['client.Notes'], null=True, blank=True)),
         ))
         db.send_create_signal(u'visit', ['Visit'])
 
         # Adding unique constraint on 'Visit', fields ['client', 'date']
-        db.create_unique(u'visit_visit', ['client_id', 'date_id'])
+        db.create_unique(u'visit_visit', ['client_id', 'date'])
 
 
     def backwards(self, orm):
         # Removing unique constraint on 'Visit', fields ['client', 'date']
-        db.delete_unique(u'visit_visit', ['client_id', 'date_id'])
+        db.delete_unique(u'visit_visit', ['client_id', 'date'])
 
         # Deleting model 'Visit'
         db.delete_table(u'visit_visit')
@@ -40,13 +40,6 @@ class Migration(SchemaMigration):
             'note': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['client.Notes']", 'null': 'True', 'blank': 'True'}),
             'regularity': ('django.db.models.fields.IntegerField', [], {})
         },
-        u'client.day': {
-            'Meta': {'object_name': 'Day'},
-            'date': ('django.db.models.fields.DateField', [], {'unique': 'True'}),
-            'dayofweek': ('django.db.models.fields.SmallIntegerField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'unfilled': ('django.db.models.fields.SmallIntegerField', [], {'default': '8'})
-        },
         u'client.notes': {
             'Meta': {'object_name': 'Notes'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -55,7 +48,7 @@ class Migration(SchemaMigration):
         u'visit.visit': {
             'Meta': {'unique_together': "(('client', 'date'),)", 'object_name': 'Visit'},
             'client': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['client.Client']"}),
-            'date': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['client.Day']"}),
+            'date': ('django.db.models.fields.DateField', [], {}),
             'good': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'note': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['client.Notes']", 'null': 'True', 'blank': 'True'})

@@ -14,8 +14,6 @@ api_patterns = [
         url(r'^gap/(?P<pk>[0-9]+)/$', restviews.GapDetail.as_view()),
         url(r'^notes/$', restviews.NotesList.as_view()),
         url(r'^notes/(?P<pk>[0-9]+)/$', restviews.NotesDetail.as_view()),
-        url(r'^day/$', restviews.DayList.as_view()),
-        url(r'^day/(?P<pk>[0-9]+)/$', restviews.DayDetail.as_view()),
         ]
     ))
 ]
