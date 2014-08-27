@@ -1,4 +1,4 @@
-from .models import Client, Gap, Notes, Day
+from .models import Client, Gap, Notes
 from rest_framework import serializers
 
 
@@ -19,10 +19,5 @@ class NotesSerializer(serializers.ModelSerializer):
         model = Notes
         fields = ('note', )
 
-
-class DaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Day
-        fields = ('date', 'dayofweek', 'unfilled')
 
 # EOF

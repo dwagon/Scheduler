@@ -7,7 +7,7 @@ from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
-from .models import Client, Day, inGap
+from .models import Client, inGap
 from visit.models import Visit, makeVisits
 from .forms import ClientForm
 
@@ -105,17 +105,16 @@ def displayMonth(request, year=None, month=None, change=None):
         current = False
         visits = None
         gap = False
-        d = None
+        dt = None
         if day:
             dt = datetime.date(year, month, day)
             if dt == today:
                 current = True
-            d = Day.objects.get_or_create(date=dt, defaults={'date': dt})[0]
             if inGap(dt):
                 gap = True
-            visits = Visit.objects.filter(date=d)
+            visits = Visit.objects.filter(date=dt)
 
-        lst[week].append((day, visits, current, gap, d))
+        lst[week].append((day, visits, current, gap, dt))
         if len(lst[week]) == 7:
             lst.append([])
             week += 1

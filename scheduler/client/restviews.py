@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Client, Gap, Notes, Day
-from .serializers import ClientSerializer, GapSerializer, NotesSerializer, DaySerializer
+from .models import Client, Gap, Notes
+from .serializers import ClientSerializer, GapSerializer, NotesSerializer
 
 
 class ClientList(generics.ListCreateAPIView):
@@ -32,14 +32,5 @@ class NotesDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Notes.objects.all()
     serializer_class = NotesSerializer
 
-
-class DayList(generics.ListCreateAPIView):
-    queryset = Day.objects.all()
-    serializer_class = DaySerializer
-
-
-class DayDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Day.objects.all()
-    serializer_class = DaySerializer
 
 # EOF

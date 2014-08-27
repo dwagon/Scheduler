@@ -34,15 +34,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'client', ['Notes'])
 
-        # Adding model 'Day'
-        db.create_table(u'client_day', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date', self.gf('django.db.models.fields.DateField')(unique=True)),
-            ('dayofweek', self.gf('django.db.models.fields.SmallIntegerField')()),
-            ('unfilled', self.gf('django.db.models.fields.SmallIntegerField')(default=8)),
-        ))
-        db.send_create_signal(u'client', ['Day'])
-
 
     def backwards(self, orm):
         # Deleting model 'Client'
@@ -54,9 +45,6 @@ class Migration(SchemaMigration):
         # Deleting model 'Notes'
         db.delete_table(u'client_notes')
 
-        # Deleting model 'Day'
-        db.delete_table(u'client_day')
-
 
     models = {
         u'client.client': {
@@ -67,13 +55,6 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
             'note': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['client.Notes']", 'null': 'True', 'blank': 'True'}),
             'regularity': ('django.db.models.fields.IntegerField', [], {})
-        },
-        u'client.day': {
-            'Meta': {'object_name': 'Day'},
-            'date': ('django.db.models.fields.DateField', [], {'unique': 'True'}),
-            'dayofweek': ('django.db.models.fields.SmallIntegerField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'unfilled': ('django.db.models.fields.SmallIntegerField', [], {'default': '8'})
         },
         u'client.gap': {
             'Meta': {'object_name': 'Gap'},

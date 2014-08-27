@@ -3,7 +3,7 @@ import datetime
 
 from django.db import models
 
-from client.models import Client, Notes, Day, inGap
+from client.models import Client, Notes, inGap
 
 
 ################################################################################
@@ -12,7 +12,7 @@ from client.models import Client, Notes, Day, inGap
 class Visit(models.Model):
     client = models.ForeignKey(Client)
     good = models.BooleanField(default=True)
-    date = models.ForeignKey(Day)
+    date = models.DateField()
     note = models.ForeignKey(Notes, null=True, blank=True)
 
     def __str__(self):
@@ -24,24 +24,33 @@ class Visit(models.Model):
 
 ################################################################################
 def newVisit(client, d):
-    v = Visit(client=client, date=Day.objects.get(date=d))
+    v = Visit(client=client, date=d)
     v.save()
-    day = Day.objects.get_or_create(date=d, defaults={'date': d})[0]
-    day.unfilled -= client.duration
-    if day.unfilled:
-        day.unfilled -= 1  # Time to have lunch, travel, etc
-    day.save()
     return v
 
 
 ################################################################################
 def currentVisit(client, d):
     """ Return the visit if there is a current visit to this client on this day """
-    visit = Visit.objects.filter(client=client, date=Day.objects.get(date=d))
+    visit = Visit.objects.filter(client=client, date=d)
     if visit:
         return visit[0]
     else:
         return None
+
+
+################################################################################
+def isWeekend(d):
+    return d.weekday() in (5, 6)
+
+
+################################################################################
+def canFit(dt, dur):
+    visits = Visit.objects.filter(date=dt)
+    capacity = 8
+    for v in visits:
+        capacity -= v.client.duration
+    return capacity >= dur
 
 
 ################################################################################
@@ -54,10 +63,9 @@ def makeVisits(client, startDate, endDate):
     lastdate = None
     while d < endDate:
         d += datetime.timedelta(days=1)
-        day = Day.objects.get_or_create(date=d, defaults={'date': d})[0]
         if inGap(d):
             continue
-        if day.isWeekend():
+        if isWeekend(d):
             continue
         if not client.goodDay(d):
             continue
@@ -67,19 +75,19 @@ def makeVisits(client, startDate, endDate):
             daysSince = datetime.timedelta(days=9999999)
         if daysSince < clientRegularity:
             continue
-        if day.canfit(client.duration):
+        if canFit(d, client.duration):
             cv = currentVisit(client, d)
             if cv:
-                lastdate = cv.date.date
+                lastdate = cv.date
                 continue
             v = newVisit(client, d)
             if daysSince > clientRegularity:
                 v.good = False
                 v.save()
-                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (day, daysSince, clientRegularity))
+                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (d, daysSince, clientRegularity))
             else:
-                msgs.append("Visit on %s\n" % day)
-            lastdate = v.date.date
+                msgs.append("Visit on %s\n" % d)
+            lastdate = v.date
     return msgs
 
 
@@ -87,7 +95,5 @@ def makeVisits(client, startDate, endDate):
 def clearVisits():
     for v in Visit.objects.all():
         v.delete()
-    for d in Day.objects.all():
-        d.delete()
 
 # EOF
