@@ -35,10 +35,21 @@ def newVisit(client, d):
 
 
 ################################################################################
+def currentVisit(client, d):
+    """ Return the visit if there is a current visit to this client on this day """
+    visit = Visit.objects.filter(client=client, date=Day.objects.get(date=d))
+    if visit:
+        return visit[0]
+    else:
+        return None
+
+
+################################################################################
 def makeVisits(client, startDate, endDate):
     msgs = []
     d = startDate
     d -= datetime.timedelta(days=1)
+    clientRegularity = datetime.timedelta(days=7*client.regularity)
     sys.stderr.write("Making visists for %s (%s)\n" % (client.name, client.duration))
     lastdate = None
     while d < endDate:
@@ -50,14 +61,22 @@ def makeVisits(client, startDate, endDate):
             continue
         if not client.goodDay(d):
             continue
-        if lastdate and d-lastdate < datetime.timedelta(days=7*client.regularity):
+        if lastdate:
+            daysSince = d - lastdate
+        else:
+            daysSince = datetime.timedelta(days=9999999)
+        if daysSince < clientRegularity:
             continue
         if day.canfit(client.duration):
+            cv = currentVisit(client, d)
+            if cv:
+                lastdate = cv.date.date
+                continue
             v = newVisit(client, d)
-            if lastdate and d-lastdate > datetime.timedelta(days=7*client.regularity):
+            if daysSince > clientRegularity:
                 v.good = False
                 v.save()
-                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (day, d-lastdate, datetime.timedelta(days=7*client.regularity)))
+                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (day, daysSince, clientRegularity))
             else:
                 msgs.append("Visit on %s\n" % day)
             lastdate = v.date.date
