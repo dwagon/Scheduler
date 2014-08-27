@@ -50,6 +50,7 @@ def canFit(dt, dur):
     capacity = 8
     for v in visits:
         capacity -= v.client.duration
+        capacity -= 1   # Allow for transport
     return capacity >= dur
 
 
@@ -61,6 +62,7 @@ def makeVisits(client, startDate, endDate):
     clientRegularity = datetime.timedelta(days=7*client.regularity)
     sys.stderr.write("Making visists for %s (%s)\n" % (client.name, client.duration))
     lastdate = None
+    firstVisit = True
     while d < endDate:
         d += datetime.timedelta(days=1)
         if inGap(d):
@@ -81,13 +83,14 @@ def makeVisits(client, startDate, endDate):
                 lastdate = cv.date
                 continue
             v = newVisit(client, d)
-            if daysSince > clientRegularity:
+            if not firstVisit and daysSince > clientRegularity:
                 v.good = False
                 v.save()
-                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (d, daysSince, clientRegularity))
+                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (d, daysSince.days, clientRegularity.days))
             else:
                 msgs.append("Visit on %s\n" % d)
             lastdate = v.date
+            firstVisit = False
     return msgs
 
 
