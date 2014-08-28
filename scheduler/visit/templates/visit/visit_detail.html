@@ -2,7 +2,7 @@
 {% block content %}
 <table border=1>
 <tr>
-<td>Visit:</td>
+<td><a href="{% url 'detailClient' visit.client.id %}">{{visit.client}}</a> visit:</td>
 <td>Date: {{visit.date}} </td>
 <td colspan="2">Notes: {{visit.notes}}
 {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit in visit</font> {% endif %}
