@@ -1,4 +1,3 @@
-import sys
 import datetime
 
 from django.db import models
@@ -24,8 +23,10 @@ class Visit(models.Model):
 
 ################################################################################
 def newVisit(client, d):
-    v = Visit(client=client, date=d)
-    v.save()
+    v = currentVisit(client, d)
+    if not v:
+        v = Visit(client=client, date=d)
+        v.save()
     return v
 
 
@@ -50,7 +51,7 @@ def canFit(dt, dur):
     capacity = 8
     for v in visits:
         capacity -= v.client.duration
-        capacity -= 1   # Allow for transport
+        capacity -= 1   # Allow for travel
     return capacity >= dur
 
 
@@ -60,38 +61,56 @@ def makeVisits(client, startDate, endDate):
     d = startDate
     d -= datetime.timedelta(days=1)
     clientRegularity = datetime.timedelta(days=7*client.regularity)
-    sys.stderr.write("Making visists for %s (%s)\n" % (client.name, client.duration))
-    lastdate = None
+    lastdate = datetime.date(year=1990, month=1, day=1)
     firstVisit = True
     while d < endDate:
         d += datetime.timedelta(days=1)
-        if inGap(d):
-            continue
-        if isWeekend(d):
+        if not tryDay(client, d):
             continue
         if not client.goodDay(d):
             continue
-        if lastdate:
-            daysSince = d - lastdate
-        else:
-            daysSince = datetime.timedelta(days=9999999)
+        daysSince = d - lastdate
         if daysSince < clientRegularity:
             continue
         if canFit(d, client.duration):
-            cv = currentVisit(client, d)
-            if cv:
-                lastdate = cv.date
-                continue
             v = newVisit(client, d)
-            if not firstVisit and daysSince > clientRegularity:
+            if firstVisit:
+                firstVisit = False
+            elif daysSince > clientRegularity and not client.flexible:
                 v.good = False
                 v.save()
-                msgs.append("Visit on %s - %s days since last once (meant to be %s days)" % (d, daysSince.days, clientRegularity.days))
-            else:
-                msgs.append("Visit on %s\n" % d)
+                msgs.append("Visit on %s - %s days since last (meant to be %s days)" % (d, daysSince.days, clientRegularity.days))
             lastdate = v.date
-            firstVisit = False
+            continue
+
+        if client.flexible:
+            v = createFlexibleVisit(client, d)
+            if v:
+                lastdate = v.date
+
     return msgs
+
+
+################################################################################
+def createFlexibleVisit(client, d):
+    for delta in (1, 2):
+        for sign in (-1, 1):
+            newdate = d + datetime.timedelta(days=sign*delta)
+            if not tryDay(client, newdate):
+                continue
+            if canFit(newdate, client.duration):
+                v = newVisit(client, newdate)
+                return v
+    return None
+
+
+################################################################################
+def tryDay(client, d):
+    if inGap(d):
+        return False
+    if isWeekend(d):
+        return False
+    return True
 
 
 ################################################################################
