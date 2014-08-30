@@ -1,19 +1,32 @@
 <table border="1">
-<tr><td colspan="2">{% block topbar %} {% endblock %}</td></tr>
+<tr><td colspan="3">{% block topbar %} {% endblock %}</td></tr>
 <tr>
-<td width=10% valign="top">
+<td rowspan="3" width=10% valign="top">
 {% block sidebar %}
 <a href="{% url 'newClient' %}">New Client</a><br>
 <a href="{% url 'listClients' %}">Existing Clients</a><br>
 <a href="{% url 'displayThisMonth' %}">View Calendar</a><br>
-<a href="{% url 'generateAllVisits' %}">Initialise Calendar</a><br>
-<a href="{% url 'clearAllVisits' %}">Nuke Calendar</a><br>
 {% endblock %}
 </td><td>
 {% block content %}
 ContentBlock
 {% endblock %}
 </td>
+<td>
+<a href="{% url 'generateAllVisits' %}">Initialise Calendar</a><br>
+<a href="{% url 'clearAllVisits' %}">Nuke Calendar</a><br>
+</td>
 </tr>
+{% if messages %}
+<tr><td colspan="2">
+<ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+</td></tr>
+{% endif %}
+{% if debug %}
 <tr><td colspan="2">{{debug}}</td></tr>
+{% endif %}
 </table>

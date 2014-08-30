@@ -2,8 +2,10 @@
 <td colspan=3>Name: <b>{{client.name}}</b> </td>
 </tr>
 <tr>
-<td>Regularity:{{client.regularity}} </td>
-<td>Day of Week: {{client.get_dayofweek_display}} </td>
+<td>Regularity:{{client.regularity}} weeks </td>
+<td>Day of Week: {{client.get_dayofweek_display}} 
+{% if client.flexible %} (Flexible) {% endif %}
+</td>
 <td>Duration: {{client.get_duration_display}} </td>
 </tr>
 <tr>

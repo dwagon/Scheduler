@@ -1,8 +1,24 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import ClientDetail, ClientUpdate, ClientList, ClientDelete
 from .views import ClientNew, index, generateVisits
 from .views import displayMonth, displayDay
+import restviews
+
+api_patterns = [
+    url(r'1/', include([
+        url(r'^client/$', restviews.ClientList.as_view()),
+        url(r'^client/(?P<pk>[0-9]+)/$', restviews.ClientDetail.as_view()),
+        url(r'^gap/$', restviews.GapList.as_view()),
+        url(r'^gap/(?P<pk>[0-9]+)/$', restviews.GapDetail.as_view()),
+        url(r'^notes/$', restviews.NotesList.as_view()),
+        url(r'^notes/(?P<pk>[0-9]+)/$', restviews.NotesDetail.as_view()),
+        ]
+    ))
+]
+
+api_patterns = format_suffix_patterns(api_patterns)
 
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
@@ -17,4 +33,5 @@ urlpatterns = patterns('',
     url(r"^month/(\d+)/$", displayMonth),
     url(r"^month$", displayMonth, name='displayThisMonth'),
     url(r"^day/(\d+)/(\d+)/(\d+)/$", displayDay, name='displayDay'),
+    url(r'^api/', include(api_patterns)),
     )
