@@ -10,6 +10,7 @@ basedir = '/opt/scheduler'
 rundir = os.path.join(basedir, 'run')
 logdir = os.path.join(basedir, 'logs')
 bindir = os.path.join(basedir, 'bin')
+user = 'scheduler'
 
 
 @runs_once
@@ -30,8 +31,8 @@ def get_pkglist():
 def users():
     if not run('getent group webapps', warn_only=True):
         sudo('groupadd --system webapps')
-    if not run('getent passwd scheduler', warn_only=True):
-        sudo('useradd --system --gid webapps --shell /bin/bash --home %s scheduler' % basedir)
+    if not run('getent passwd %s' % user, warn_only=True):
+        sudo('useradd --system --gid webapps --shell /bin/bash --home %s %s' % (basedir, user))
 
 
 def install_pkg(pkgname):
@@ -47,7 +48,7 @@ def install_postgres():
     install_pkg('postgresql-9.3')
     install_pkg('postgresql-server-dev-9.3')
     with settings(warn_only=True):
-        sudo('createuser scheduler', user='postgres')
+        sudo('createuser %s' % user, user='postgres')
     with settings(hide('output')):
         output = sudo('psql -l', user='postgres')
     if 'scheduler' not in output:
@@ -71,6 +72,7 @@ def install_virtualenv():
     for d in (rundir, logdir, bindir):
         if not exists(d):
             sudo('mkdir %s' % d)
+    sudo('chown %s %s' % (user, rundir))
     put('configs/gunicorn_start', os.path.join(bindir, 'gunicorn_start'), use_sudo=True)
     sudo('chmod 0755 %s' % os.path.join(bindir, 'gunicorn_start'))
     if not exists(os.path.join(basedir, 'bin/python')):
@@ -80,9 +82,10 @@ def install_virtualenv():
             sudo('./bin/pip install -r ./requirements.txt')
 
 
+@task
 def warmup():
     with cd(basedir):
-        sudo("%s/python ./scheduler/manage.py syncdb" % bindir)
+        sudo("%s/python ./scheduler/manage.py migrate" % bindir, user=user)
 
 
 @task
@@ -109,8 +112,8 @@ def deploy(branch='master'):
 @task
 def start():
     with cd(basedir):
-        sudo('touch %s/gunicorn.log' % logdir)
-        sudo("%s/gunicorn_start >> %s/gunicorn.log 2>&1 & " % (bindir, logdir))
+        sudo('touch %s/gunicorn.log' % logdir, user=user)
+        sudo("%s/gunicorn_start >> %s/gunicorn.log 2>&1 & " % (bindir, logdir), user=user)
         sudo("/etc/init.d/nginx reload")
 
 # EOF
