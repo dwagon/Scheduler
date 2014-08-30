@@ -112,8 +112,9 @@ def deploy(branch='master'):
 @task
 def start():
     with cd(basedir):
-        sudo('touch %s/gunicorn.log' % logdir, user=user)
-        sudo("%s/gunicorn_start >> %s/gunicorn.log 2>&1 & " % (bindir, logdir), user=user)
+        with settings(sudo_user=user):
+            sudo('touch %s/gunicorn.log' % logdir)
+            sudo("%s/gunicorn_start >> %s/gunicorn.log 2>&1 & " % (bindir, logdir))
         sudo("/etc/init.d/nginx reload")
 
 # EOF
