@@ -74,7 +74,12 @@ def displayDay(request, year=None, month=None, day=None):
 
 
 ################################################################################
-def displayMonth(request, year=None, month=None, change=None):
+def displayClientMonth(request, client, year=None, month=None):
+    return displayMonth(request, year=year, month=month, client=client, template='client/month.html')
+
+
+################################################################################
+def displayMonth(request, year=None, month=None, change=None, client=None, template='client/display_month.html'):
     """Listing of days in `month`."""
     today = datetime.date.today()
     if year is None:
@@ -113,12 +118,14 @@ def displayMonth(request, year=None, month=None, change=None):
             if inGap(dt):
                 gap = True
             visits = Visit.objects.filter(date=dt)
+            if client:
+                visits = visits.filter(client=client)
 
         lst[week].append((day, visits, current, gap, dt))
         if len(lst[week]) == 7:
             lst.append([])
             week += 1
 
-    return render_to_response("client/month.html", dict(year=year, month=month, month_days=lst, mname=mnames[month-1]))
+    return render_to_response(template, dict(year=year, month=month, month_days=lst, mname=mnames[month-1]))
 
 # EOF

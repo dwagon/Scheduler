@@ -12,3 +12,6 @@
 {% endfor %}
 </table>
 {% endblock %}
+{% block rightbar %}
+<iframe src="{% url 'displayClientMonth' client=client.id %}">
+{% endblock %}
