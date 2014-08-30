@@ -1,12 +1,15 @@
 #! /usr/bin/env python
 from fabric.api import task, env, sudo, runs_once, settings, hide, put
-from fabric.api import cd
+from fabric.api import cd, run
 from fabric.contrib.files import exists
 import os
 
 env.use_ssh_config = True
 
 basedir = '/opt/scheduler'
+rundir = os.path.join(basedir, 'run')
+logdir = os.path.join(basedir, 'logs')
+bindir = os.path.join(basedir, 'bin')
 
 
 @runs_once
@@ -24,6 +27,13 @@ def get_pkglist():
     return pkgs
 
 
+def users():
+    if not run('getent group webapps', warn_only=True):
+        sudo('groupadd --system webapps')
+    if not run('getent passwd scheduler', warn_only=True):
+        sudo('useradd --system --gid webapps --shell /bin/bash --home %s scheduler' % basedir)
+
+
 def install_pkg(pkgname):
     installed = get_pkglist()
     if pkgname in installed:
@@ -36,6 +46,12 @@ def install_pkg(pkgname):
 def install_postgres():
     install_pkg('postgresql-9.3')
     install_pkg('postgresql-server-dev-9.3')
+    with settings(warn_only=True):
+        sudo('createuser scheduler', user='postgres')
+    with settings(hide('output')):
+        output = sudo('psql -l', user='postgres')
+    if 'scheduler' not in output:
+        sudo('createdb scheduler', user='postgres')
 
 
 @task
@@ -52,11 +68,21 @@ def install_nginx():
 def install_virtualenv():
     install_pkg('python-virtualenv')
     install_pkg('python-dev')
+    for d in (rundir, logdir, bindir):
+        if not exists(d):
+            sudo('mkdir %s' % d)
+    put('configs/gunicorn_start', os.path.join(bindir, 'gunicorn_start'), use_sudo=True)
+    sudo('chmod 0755 %s' % os.path.join(bindir, 'gunicorn_start'))
     if not exists(os.path.join(basedir, 'bin/python')):
         sudo('/usr/bin/virtualenv %s' % basedir)
     with cd(basedir):
         with settings(hide('output')):
             sudo('./bin/pip install -r ./requirements.txt')
+
+
+def warmup():
+    with cd(basedir):
+        sudo("%s/python ./scheduler/manage.py syncdb" % bindir)
 
 
 @task
@@ -72,9 +98,19 @@ def clone(branch):
 
 @task
 def deploy(branch='master'):
+    users()
     install_nginx()
     install_postgres()
     clone(branch)
     install_virtualenv()
+    warmup()
+
+
+@task
+def start():
+    with cd(basedir):
+        sudo('touch %s/gunicorn.log' % logdir)
+        sudo("%s/gunicorn_start >> %s/gunicorn.log 2>&1 & " % (bindir, logdir))
+        sudo("/etc/init.d/nginx reload")
 
 # EOF

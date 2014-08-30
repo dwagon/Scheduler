@@ -3,3 +3,4 @@ South
 psycopg2
 djangorestframework
 fabric
+gunicorn
