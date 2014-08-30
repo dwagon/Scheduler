@@ -2,3 +2,4 @@ Django
 South
 psycopg2
 djangorestframework
+fabric
