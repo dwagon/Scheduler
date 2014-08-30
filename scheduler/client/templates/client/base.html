@@ -13,8 +13,10 @@ ContentBlock
 {% endblock %}
 </td>
 <td>
+{% block rightbar %}
 <a href="{% url 'generateAllVisits' %}">Initialise Calendar</a><br>
 <a href="{% url 'clearAllVisits' %}">Nuke Calendar</a><br>
+{% endblock %}
 </td>
 </tr>
 {% if messages %}
