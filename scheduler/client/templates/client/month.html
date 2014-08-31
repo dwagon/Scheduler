@@ -2,7 +2,7 @@
 <table border=1>
 <tr>
 <td> <a href= "{% url "displayYearMonthPage" year month "prev" %}">&lt;&lt; Prev</a></td>
-<td colspan="5" align="center"> <strong>{{ mname }} {{ year }}</strong></td>
+<td colspan="5" align="center"> <strong>{{ mname }} {{ year }} {{client}}</strong></td>
 <td><a href= "{% url "displayYearMonthPage" year month "next" %}">Next &gt;&gt;</a></td>
 </tr>
 <tr>

@@ -25,7 +25,14 @@ class ClientDetail(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ClientDetail, self).get_context_data(*args, **kwargs)
-        context['visits'] = Visit.objects.filter(client=kwargs['object'])
+        client = kwargs['object']
+        d = monthDetail(client=client)
+        context['visits'] = Visit.objects.filter(client=client)
+        context['year'] = d['year']
+        context['month'] = d['month']
+        context['month_days'] = d['month_days']
+        context['mname'] = d['mname']
+        context['client'] = client
         return context
 
 
@@ -79,8 +86,7 @@ def displayClientMonth(request, client, year=None, month=None):
 
 
 ################################################################################
-def displayMonth(request, year=None, month=None, change=None, client=None, template='client/display_month.html'):
-    """Listing of days in `month`."""
+def monthDetail(year=None, month=None, change=None, client=None):
     today = datetime.date.today()
     if year is None:
         year = today.year
@@ -125,7 +131,13 @@ def displayMonth(request, year=None, month=None, change=None, client=None, templ
         if len(lst[week]) == 7:
             lst.append([])
             week += 1
+    return {'year': year, 'month': month, 'month_days': lst, 'mname': mnames[month-1]}
 
-    return render_to_response(template, dict(year=year, month=month, month_days=lst, mname=mnames[month-1]))
+
+################################################################################
+def displayMonth(request, year=None, month=None, change=None, client=None, template='client/display_month.html'):
+    """Listing of days in `month`."""
+    d = monthDetail(year, month, change, client)
+    return render_to_response(template, d)
 
 # EOF
