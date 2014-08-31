@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import Client, Notes
+from .models import Client
 
 admin.site.register(Client)
-admin.site.register(Notes)

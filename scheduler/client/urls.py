@@ -10,8 +10,6 @@ api_patterns = [
     url(r'1/', include([
         url(r'^client/$', restviews.ClientList.as_view()),
         url(r'^client/(?P<pk>[0-9]+)/$', restviews.ClientDetail.as_view()),
-        url(r'^notes/$', restviews.NotesList.as_view()),
-        url(r'^notes/(?P<pk>[0-9]+)/$', restviews.NotesDetail.as_view()),
         ]
     ))
 ]
@@ -34,3 +32,5 @@ urlpatterns = patterns(
     url(r"^day/(\d+)/(\d+)/(\d+)/$", displayDay, name='displayDay'),
     url(r'^api/', include(api_patterns)),
     )
+
+# EOF

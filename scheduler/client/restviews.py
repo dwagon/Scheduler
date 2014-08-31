@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Client, Notes
-from .serializers import ClientSerializer, NotesSerializer
+from .models import Client
+from .serializers import ClientSerializer
 
 
 class ClientList(generics.ListCreateAPIView):
@@ -11,16 +11,5 @@ class ClientList(generics.ListCreateAPIView):
 class ClientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-
-
-class NotesList(generics.ListCreateAPIView):
-    queryset = Notes.objects.all()
-    serializer_class = NotesSerializer
-
-
-class NotesDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Notes.objects.all()
-    serializer_class = NotesSerializer
-
 
 # EOF

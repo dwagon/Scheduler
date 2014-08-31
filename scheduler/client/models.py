@@ -1,4 +1,5 @@
 from django.db import models
+from note.models import Note
 
 DOW_CHOICES = ((0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'), (4, 'Friday'), (5, 'Saturday'), (6, 'Sunday'), (7, 'Anyday'))
 DUR_CHOICES = ((0, 'Unknown'), (1, 'Hour'), (2, '1/4 Day'), (3, '1/3 Day'), (4, '1/2 Day'), (8, 'Full Day'))
@@ -12,7 +13,7 @@ class Client(models.Model):
     regularity = models.IntegerField()
     dayofweek = models.SmallIntegerField(choices=DOW_CHOICES)
     duration = models.SmallIntegerField(choices=DUR_CHOICES)
-    note = models.ForeignKey('Notes', null=True, blank=True)
+    note = models.ForeignKey(Note, null=True, blank=True)
     flexible = models.BooleanField(default=False)
 
     ############################################################################
@@ -26,12 +27,5 @@ class Client(models.Model):
         if d.weekday() == self.dayofweek:
             return True
         return False
-
-
-################################################################################
-################################################################################
-################################################################################
-class Notes(models.Model):
-    note = models.CharField(max_length=250)
 
 # EOF
