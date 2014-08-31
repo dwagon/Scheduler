@@ -1,6 +1,11 @@
 Scheduler
 =========
 
+System to allow scheduling of multiple clients
+
+Features:
+* Gaps - times when you don't want any client visits scheduled. E.g. holidays.
+
 CHANGELOG
 =========
 
