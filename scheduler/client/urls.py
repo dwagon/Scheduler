@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import ClientDetail, ClientUpdate, ClientList, ClientDelete
-from .views import ClientNew, index, generateVisits
+from .views import ClientNew, generateVisits
 from .views import displayMonth, displayDay, displayClientMonth
 import restviews
 
@@ -21,7 +21,6 @@ api_patterns = [
 api_patterns = format_suffix_patterns(api_patterns)
 
 urlpatterns = patterns('',
-    url(r'^$', index, name='index'),
     url(r'^new/$', ClientNew.as_view(), name='newClient'),
     url(r'^list/$', ClientList.as_view(), name='listClients'),
     url(r'^(?P<pk>\d+)/$', ClientDetail.as_view(), name='detailClient'),
