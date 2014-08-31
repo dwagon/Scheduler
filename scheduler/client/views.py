@@ -1,7 +1,7 @@
 import datetime
 import calendar
 
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render_to_response, redirect
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -56,13 +56,6 @@ class ClientNew(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('detailClient', kwargs={'pk': self.object.id})
-
-
-################################################################################
-def index(request):
-    template_name = "client/index.html"
-    context = {}
-    return render(request, template_name, context)
 
 
 ################################################################################
