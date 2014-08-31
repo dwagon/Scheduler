@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'south',
     'client',
+    'gap',
     'visit'
 )
 

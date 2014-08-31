@@ -1,0 +1,8 @@
+{% extends "client/base.html" %}
+{% block content %}
+<ul>
+{% for gap in gap_list %}
+    <li><a href="{% url 'detailGap' gap.id %}">{{ gap.desc }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

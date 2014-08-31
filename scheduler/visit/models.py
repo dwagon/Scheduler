@@ -2,7 +2,8 @@ import datetime
 
 from django.db import models
 
-from client.models import Client, Notes, inGap
+from client.models import Client, Notes
+from gap.models import inGap
 
 
 ################################################################################

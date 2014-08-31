@@ -7,7 +7,8 @@ from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
-from .models import Client, inGap
+from .models import Client
+from gap.models import inGap
 from visit.models import Visit, makeVisits
 from .forms import ClientForm
 
