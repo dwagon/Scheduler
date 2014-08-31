@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views import generic
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -20,13 +19,13 @@ class GapDetail(generic.DetailView):
 ################################################################################
 class GapUpdate(UpdateView):
     model = Gap
-    success_url = reverse_lazy('listGaps')
+    success_url = reverse_lazy('listGap')
 
 
 ################################################################################
 class GapDelete(DeleteView):
     model = Gap
-    success_url = reverse_lazy('listGaps')
+    success_url = reverse_lazy('listGap')
 
 
 ################################################################################
@@ -36,13 +35,5 @@ class GapNew(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('detailGap', kwargs={'pk': self.object.id})
-
-
-################################################################################
-def index(request):
-    template_name = "client/index.html"
-    context = {}
-    return render(request, template_name, context)
-
 
 # EOF

@@ -17,7 +17,7 @@ api_patterns = format_suffix_patterns(api_patterns)
 urlpatterns = patterns(
     '',
     url(r'^new/$', GapNew.as_view(), name='newGap'),
-    url(r'^list/$', GapList.as_view(), name='listGaps'),
+    url(r'^list/$', GapList.as_view(), name='listGap'),
     url(r'^(?P<pk>\d+)/$', GapDetail.as_view(), name='detailGap'),
     url(r'^(?P<pk>\d+)/update$', GapUpdate.as_view(), name='updateGap'),
     url(r'^(?P<pk>\d+)/delete$', GapDelete.as_view(), name='deleteGap'),
