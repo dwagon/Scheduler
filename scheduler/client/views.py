@@ -109,14 +109,13 @@ def monthDetail(year=None, month=None, change=None, client=None):
     for day in cal.itermonthdays(year, month):
         current = False
         visits = None
-        gap = False
+        gap = None
         dt = None
         if day:
             dt = datetime.date(year, month, day)
             if dt == today:
                 current = True
-            if inGap(dt):
-                gap = True
+            gap = inGap(dt)
             visits = Visit.objects.filter(date=dt)
             if client:
                 visits = visits.filter(client=client)

@@ -22,7 +22,7 @@ def inGap(dt):
     gaps = Gap.objects.all()
     for gp in gaps:
         if gp.inGap(dt):
-            return True
-    return False
+            return gp
+    return None
 
 # EOF
