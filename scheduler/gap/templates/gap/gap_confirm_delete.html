@@ -1,11 +1,11 @@
 {% extends "base/base.html" %} 
 {% block content %} 
 <table border=1>
-{% include "visit/visit_view.html" %}
+{% include "gap/gap_view.html" %}
 <tr>
 <td colspan="3">
 <form action="" method="post"> {% csrf_token %} 
-    <input type="submit" value="Delete {{visit.client}} at {{visit.date}}" name="Delete" /> 
+    <input type="submit" value="Delete {{gap.desc}} {{gap.start}} - {{gap.end}}" name="Delete" /> 
 </form> 
 </td></tr>
 </table>

@@ -1,13 +1,14 @@
 import datetime
 import calendar
 
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render_to_response, redirect
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
-from .models import Client, inGap
+from .models import Client
+from gap.models import inGap
 from visit.models import Visit, makeVisits
 from .forms import ClientForm
 
@@ -25,7 +26,14 @@ class ClientDetail(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ClientDetail, self).get_context_data(*args, **kwargs)
-        context['visits'] = Visit.objects.filter(client=kwargs['object'])
+        client = kwargs['object']
+        d = monthDetail(client=client)
+        context['visits'] = Visit.objects.filter(client=client)
+        context['year'] = d['year']
+        context['month'] = d['month']
+        context['month_days'] = d['month_days']
+        context['mname'] = d['mname']
+        context['client'] = client
         return context
 
 
@@ -51,13 +59,6 @@ class ClientNew(CreateView):
 
 
 ################################################################################
-def index(request):
-    template_name = "client/index.html"
-    context = {}
-    return render(request, template_name, context)
-
-
-################################################################################
 def generateVisits(request, pk):
     start = datetime.date(2014, 1, 1)
     end = datetime.date(2015, 12, 31)
@@ -79,8 +80,7 @@ def displayClientMonth(request, client, year=None, month=None):
 
 
 ################################################################################
-def displayMonth(request, year=None, month=None, change=None, client=None, template='client/display_month.html'):
-    """Listing of days in `month`."""
+def monthDetail(year=None, month=None, change=None, client=None):
     today = datetime.date.today()
     if year is None:
         year = today.year
@@ -109,14 +109,13 @@ def displayMonth(request, year=None, month=None, change=None, client=None, templ
     for day in cal.itermonthdays(year, month):
         current = False
         visits = None
-        gap = False
+        gap = None
         dt = None
         if day:
             dt = datetime.date(year, month, day)
             if dt == today:
                 current = True
-            if inGap(dt):
-                gap = True
+            gap = inGap(dt)
             visits = Visit.objects.filter(date=dt)
             if client:
                 visits = visits.filter(client=client)
@@ -125,7 +124,13 @@ def displayMonth(request, year=None, month=None, change=None, client=None, templ
         if len(lst[week]) == 7:
             lst.append([])
             week += 1
+    return {'year': year, 'month': month, 'month_days': lst, 'mname': mnames[month-1]}
 
-    return render_to_response(template, dict(year=year, month=month, month_days=lst, mname=mnames[month-1]))
+
+################################################################################
+def displayMonth(request, year=None, month=None, change=None, client=None, template='client/display_month.html'):
+    """Listing of days in `month`."""
+    d = monthDetail(year, month, change, client)
+    return render_to_response(template, d)
 
 # EOF

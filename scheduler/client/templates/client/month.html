@@ -2,7 +2,7 @@
 <table border=1>
 <tr>
 <td> <a href= "{% url "displayYearMonthPage" year month "prev" %}">&lt;&lt; Prev</a></td>
-<td colspan="5" align="center"> <strong>{{ mname }} {{ year }}</strong></td>
+<td colspan="5" align="center"> <strong>{{ mname }} {{ year }} {{client}}</strong></td>
 <td><a href= "{% url "displayYearMonthPage" year month "next" %}">Next &gt;&gt;</a></td>
 </tr>
 <tr>
@@ -31,7 +31,13 @@
         <!-- Day number and entry snippets -->
         {% if day != 0 %}
         <table>
-            <tr valign="top"><td>{{ day }}</td></tr>
+            <tr valign="top">
+            {% if gap %}
+                <td bgColor="red"> {{day}} {{ gap.desc }}</td>
+            {% else %}
+                <td>{{ day }}</td>
+            {% endif %}
+            </tr>
         {% for visit in visits %}
             <tr><td>
             <font color={% if visit.good %}"black"{% else %}"red"{%endif%}>

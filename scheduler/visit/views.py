@@ -67,7 +67,7 @@ def generateAllVisits(request):
         msgs = makeVisits(c, start, end)
         for msg in msgs:
             messages.info(request, msg)
-    return render(request, "client/index.html", {})
+    return render(request, "base/index.html", {})
 
 
 ################################################################################

@@ -1,4 +1,4 @@
-{% extends "client/base.html" %}
+{% extends "base/base.html" %}
 {% block content %}
 <table border=1>
 {% include "client/client_view.html" %}
@@ -13,5 +13,5 @@
 </table>
 {% endblock %}
 {% block rightbar %}
-<iframe src="{% url 'displayClientMonth' client=client.id %}">
+{% include "client/month.html" %}
 {% endblock %}
