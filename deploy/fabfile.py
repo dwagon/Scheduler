@@ -73,6 +73,7 @@ def install_virtualenv():
         if not exists(d):
             sudo('mkdir %s' % d)
     sudo('chown %s %s' % (user, rundir))
+    sudo('chown %s %s' % (user, logdir))
     put('configs/gunicorn_start', os.path.join(bindir, 'gunicorn_start'), use_sudo=True)
     sudo('chmod 0755 %s' % os.path.join(bindir, 'gunicorn_start'))
     if not exists(os.path.join(basedir, 'bin/python')):
@@ -107,6 +108,7 @@ def deploy(branch='master'):
     clone(branch)
     install_virtualenv()
     warmup()
+    start()
 
 
 @task
