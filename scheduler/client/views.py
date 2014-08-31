@@ -7,7 +7,8 @@ from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
-from .models import Client, inGap
+from .models import Client
+from gap.models import inGap
 from visit.models import Visit, makeVisits
 from .forms import ClientForm
 
@@ -108,14 +109,13 @@ def monthDetail(year=None, month=None, change=None, client=None):
     for day in cal.itermonthdays(year, month):
         current = False
         visits = None
-        gap = False
+        gap = None
         dt = None
         if day:
             dt = datetime.date(year, month, day)
             if dt == today:
                 current = True
-            if inGap(dt):
-                gap = True
+            gap = inGap(dt)
             visits = Visit.objects.filter(date=dt)
             if client:
                 visits = visits.filter(client=client)

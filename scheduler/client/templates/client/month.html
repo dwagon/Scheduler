@@ -31,7 +31,13 @@
         <!-- Day number and entry snippets -->
         {% if day != 0 %}
         <table>
-            <tr valign="top"><td>{{ day }}</td></tr>
+            <tr valign="top">
+            {% if gap %}
+                <td bgColor="red"> {{day}} {{ gap.desc }}</td>
+            {% else %}
+                <td>{{ day }}</td>
+            {% endif %}
+            </tr>
         {% for visit in visits %}
             <tr><td>
             <font color={% if visit.good %}"black"{% else %}"red"{%endif%}>
