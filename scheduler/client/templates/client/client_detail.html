@@ -4,13 +4,13 @@
 {% include "client/client_view.html" %}
 <tr>
 <td><a href="{%url 'updateClient' client.id %}">Update Client Details</a></td>
-<td><a href="{%url 'generateVisits' client.id %}">Generate Visits</a></td>
+<td><a href="{%url 'clientGenerateVisits' client.id %}">Generate Visits</a></td>
 </tr>
 <tr>
 <td><a href="{%url 'clientDelete' client.id %}">Delete Client</a></td>
 <td>
 {% if visits %}
-    <a href="{%url 'visitDelete' client.id %}">Delete all Visits</a>
+    <a href="{%url 'clientDeleteVisits' client.id %}">Delete all Visits</a>
 {% endif %}
 </td>
 </tr>

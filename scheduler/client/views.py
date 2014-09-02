@@ -59,7 +59,7 @@ class ClientNew(CreateView):
 
 
 ################################################################################
-def visitDelete(requst, pk):
+def clientDeleteVisits(requst, pk):
     """ Delete all the visits for a client """
     c = Client.objects.get(pk=pk)
     for v in Visit.objects.filter(client=c):
@@ -68,7 +68,7 @@ def visitDelete(requst, pk):
 
 
 ################################################################################
-def generateVisits(request, pk):
+def clientGenerateVisits(request, pk):
     c = Client.objects.get(pk=pk)
     if c.startdate:
         start = c.startdate
