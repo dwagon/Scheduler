@@ -40,7 +40,10 @@ class ClientDetail(generic.DetailView):
 ################################################################################
 class ClientUpdate(UpdateView):
     model = Client
-    success_url = reverse_lazy('listClients')
+    form_class = ClientForm
+
+    def get_success_url(self):
+        return reverse_lazy('detailClient', kwargs={'pk': self.object.id})
 
 
 ################################################################################
