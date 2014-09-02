@@ -1,5 +1,4 @@
 from django.db import models
-from note.models import Note
 
 DOW_CHOICES = (
     (0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'),
@@ -18,7 +17,7 @@ class Client(models.Model):
     regularity = models.PositiveSmallIntegerField(help_text="How many weeks between visits")
     dayofweek = models.SmallIntegerField(choices=DOW_CHOICES)
     duration = models.SmallIntegerField(choices=DUR_CHOICES)
-    note = models.ForeignKey(Note, null=True, blank=True)
+    note = models.CharField(max_length=250, blank=True)
     flexible = models.BooleanField(default=False, help_text="Try adjacent days to fit in visit")
     startdate = models.DateField(null=True, default=None, help_text="Schedule visits from this date")
     enddate = models.DateField(null=True, default=None, help_text="Schedule visits until this date")
