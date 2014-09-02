@@ -8,6 +8,12 @@
 </td>
 <td>Duration: {{client.get_duration_display}} </td>
 </tr>
+{% if client.startdate or client.enddate %}
+<tr>
+<td> Date Range: </td>
+<td colspan="2">{{client.startdate}} - {{client.enddate}} </td>
+</tr>
+{% endif %}
 <tr>
 <td colspan=3>Notes: {{client.notes}}</td>
 </tr>

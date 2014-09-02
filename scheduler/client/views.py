@@ -60,9 +60,15 @@ class ClientNew(CreateView):
 
 ################################################################################
 def generateVisits(request, pk):
-    start = datetime.date(2014, 1, 1)
-    end = datetime.date(2015, 12, 31)
     c = Client.objects.get(pk=pk)
+    if c.startdate:
+        start = c.startdate
+    else:
+        start = datetime.date(2014, 1, 1)
+    if c.enddate:
+        end = c.enddate
+    else:
+        end = datetime.date(2015, 12, 31)
     msgs = makeVisits(c, start, end)
     for msg in msgs:
         messages.info(request, msg)
