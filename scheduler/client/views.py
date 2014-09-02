@@ -59,6 +59,15 @@ class ClientNew(CreateView):
 
 
 ################################################################################
+def visitDelete(requst, pk):
+    """ Delete all the visits for a client """
+    c = Client.objects.get(pk=pk)
+    for v in Visit.objects.filter(client=c):
+        v.delete()
+    return redirect("detailClient", pk=pk)
+
+
+################################################################################
 def generateVisits(request, pk):
     c = Client.objects.get(pk=pk)
     if c.startdate:

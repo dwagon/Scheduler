@@ -3,9 +3,16 @@
 <table border=1>
 {% include "client/client_view.html" %}
 <tr>
-<td colspan="1"><a href="{%url 'updateClient' client.id %}">Update Client Details</a></td>
-<td colspan="1"><a href="{%url 'generateVisits' client.id %}">Generate Visits</a></td>
-<td colspan="1"><a href="{%url 'clientDelete' client.id %}">Delete Client</a></td>
+<td><a href="{%url 'updateClient' client.id %}">Update Client Details</a></td>
+<td><a href="{%url 'generateVisits' client.id %}">Generate Visits</a></td>
+</tr>
+<tr>
+<td><a href="{%url 'clientDelete' client.id %}">Delete Client</a></td>
+<td>
+{% if visits %}
+    <a href="{%url 'visitDelete' client.id %}">Delete all Visits</a>
+{% endif %}
+</td>
 </tr>
 {% for visit in visits %}
     <tr><td colspan="3">{% include "visit/visit_view.html" %}</td></tr>
