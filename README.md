@@ -9,8 +9,12 @@ Features:
 CHANGELOG
 =========
 
+Release 0.3
+-----------
+* Implemented start and end dates for client visits
+
 Release 0.2
-----------
+-----------
 * Fabric'ised the deployment
 * Implemented gaps
 * Internal cleanup
