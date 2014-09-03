@@ -3,10 +3,11 @@
 <table border=1>
 {% include "visit/visit_view.html" %}
 <tr>
-<td colspan="3">
-<form action="" method="post"> {% csrf_token %} 
-    <input type="submit" value="Delete {{visit.client}} at {{visit.date}}" name="Delete" /> 
-</form> 
-</td></tr>
+    <td colspan="3">
+        <form action="" method="post"> {% csrf_token %} 
+            <input type="submit" value="Delete {{visit.client}} at {{visit.date}}" name="Delete" /> 
+        </form> 
+    </td>
+</tr>
 </table>
 {% endblock %} 
