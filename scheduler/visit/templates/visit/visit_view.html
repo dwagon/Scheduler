@@ -9,7 +9,9 @@ onMouseOut="this.bgColor='white';"
     {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit </font> {% endif %}
     </td>
 </tr>
+{% if visit.note %}
 <tr>
     <td colspan="2">Notes: {{visit.note}}</td>
 </tr>
+{% endif %}
 </table>

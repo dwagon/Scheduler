@@ -14,6 +14,8 @@
 <td colspan="2">{{client.startdate}} - {{client.enddate}} </td>
 </tr>
 {% endif %}
-<tr>
-<td colspan=3>Notes: {{client.note}}</td>
-</tr>
+{% if client.note %}
+    <tr>
+    <td colspan=3>Notes: {{client.note}}</td>
+    </tr>
+{% endif %}
