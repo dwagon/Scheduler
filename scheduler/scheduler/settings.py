@@ -3,6 +3,8 @@
 import os
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -112,7 +114,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates')
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -125,7 +127,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'rest_framework',
-    'south',
     'client',
     'gap',
     'visit'
