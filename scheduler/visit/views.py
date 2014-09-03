@@ -26,6 +26,9 @@ class VisitDetail(generic.DetailView):
         context = super(VisitDetail, self).get_context_data(*args, **kwargs)
         return context
 
+    def get_success_url(self):
+        return reverse_lazy('detailClient', kwargs={'pk': self.object.client.id})
+
 
 ################################################################################
 class VisitUpdate(UpdateView):
