@@ -11,6 +11,7 @@ class ClientForm(forms.ModelForm):
     flexible = forms.BooleanField(required=False)
     startdate = forms.DateField(required=False)
     enddate = forms.DateField(required=False)
+    note = forms.CharField(required=False, max_length=250)
 
     class Meta:
         model = Client
