@@ -1,5 +1,5 @@
 <tr>
-<td colspan=3>Name: <b>{{client.name}}</b> </td>
+<td colspan=2>Name: <b>{{client.name}}</b> </td>
 </tr>
 <tr>
 <td>Every {{client.regularity}} weeks </td>
@@ -22,6 +22,8 @@ Onwards
 </td>
 </tr>
 {% endif %}
-<tr>
-<td colspan=3>Notes: {{client.notes}}</td>
-</tr>
+{% if client.note %}
+    <tr>
+    <td colspan=2>Notes: {{client.note}}</td>
+    </tr>
+{% endif %}
