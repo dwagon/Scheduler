@@ -12,6 +12,7 @@ CHANGELOG
 Release 0.3
 -----------
 * Implemented start and end dates for client visits
+* Added notes
 
 Release 0.2
 -----------
