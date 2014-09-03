@@ -128,7 +128,6 @@ INSTALLED_APPS = (
     'south',
     'client',
     'gap',
-    'note',
     'visit'
 )
 
