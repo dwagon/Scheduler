@@ -2,22 +2,39 @@
 {% block content %}
 <table border=1>
 {% include "client/client_view.html" %}
-<tr>
-<td><a href="{%url 'updateClient' client.id %}">Update Client Details</a></td>
-<td><a href="{%url 'clientGenerateVisits' client.id %}">Generate Visits</a></td>
-</tr>
-<tr>
-<td><a href="{%url 'clientDelete' client.id %}">Delete Client</a></td>
-<td>
+<div class="row">
+    <div class="col-md-2">
+        <a href="{%url 'updateClient' client.id %}">
+            <button type="button" class="btn btn-primary btn-sm">Update Client</button>
+        </a>
+    </div>
+    <div class="col-md-2">
+        <a href="{%url 'clientGenerateVisits' client.id %}">
+            <button type="button" class="btn btn-primary btn-sm">Generate Visits</button>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <a href="{%url 'clientDelete' client.id %}">
+            <button type="button" class="btn btn-warning btn-sm">Delete Client</button>
+        </a>
+    </div>
 {% if visits %}
-    <a href="{%url 'clientDeleteVisits' client.id %}">Delete all Visits</a>
+    <div class="col-md-2">
+    <a href="{%url 'clientDeleteVisits' client.id %}">
+        <button type="button" class="btn btn-warning btn-sm">Delete all visits</button>
+    </a>
+    </div>
 {% endif %}
-</td>
-</tr>
+</div>
 {% for visit in visits %}
-    <tr><td colspan="2">{% include "visit/visit_view.html" %}</td></tr>
+<div class="row">
+    <div class="col-md-5">
+        {% include "visit/visit_view.html" %}
+    </div>
+</div>
 {% endfor %}
-</table>
 {% endblock %}
 {% block rightbar %}
 {% include "client/month.html" %}

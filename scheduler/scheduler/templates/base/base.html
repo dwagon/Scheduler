@@ -1,36 +1,72 @@
-<table border="1">
-<tr><td colspan="3">{% block topbar %} {% endblock %}</td></tr>
-<tr>
-<td rowspan="3" width=10% valign="top">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../../favicon.ico">
+<title>Scheduler</title>
+<!-- Bootstrap core CSS -->
+<link href="/static/b/css/bootstrap.min.css"
+rel="stylesheet">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+
+<div class="row">
+    <div class="col-md-1">Scheduler</div>
+    <div class="col-md-11">{% block topbar %} {% endblock %}</div>
+</div>
+<div class="row">
+    <div class="col-md-2">
 {% block sidebar %}
-<a href="{% url 'newClient' %}">New Client</a><br>
-<a href="{% url 'listClients' %}">Existing Clients</a><br>
-<a href="{% url 'displayThisMonth' %}">View Calendar</a><br>
-<a href="{% url 'newGap' %}">New Gap</a><br>
-<a href="{% url 'listGap' %}">Existing Gaps</a><br>
+<a href="{% url 'index' %}"><button type="button" class="btn btn-primary btn-lg
+btn-block ">Home</button></a><br>
+<a href="{% url 'newClient' %}"><button type="button" class="btn btn-primary
+btn-lg btn-block ">New Client</button></a><br>
+<a href="{% url 'listClients' %}"><button type="button" class="btn btn-primary
+btn-lg btn-block ">Existing Clients</button></a><br>
+<a href="{% url 'displayThisMonth' %}"><button type="button" class="btn
+btn-primary btn-lg btn-block ">View Calendar</button></a><br>
+<a href="{% url 'newGap' %}"><button type="button" class="btn btn-primary btn-lg
+btn-block ">New Gap</button></a><br>
+<a href="{% url 'listGap' %}"><button type="button" class="btn btn-primary btn-lg
+btn-block ">Existing Gaps</button></a><br>
 {% endblock %}
-</td><td>
+    </div>
+<div class="col-md-8">
 {% block content %}
 ContentBlock
 {% endblock %}
-</td>
-<td valign="top">
+</div>
+<div class="col-md-2">
 {% block rightbar %}
-<a href="{% url 'generateAllVisits' %}">Initialise Calendar</a><br>
-<a href="{% url 'clearAllVisits' %}">Nuke Calendar</a><br>
+<a href="{% url 'generateAllVisits' %}"><button type="button" class="btn
+btn-danger btn-lg btn-block ">Initialise Calendar</button></a></br>
+<a href="{% url 'clearAllVisits' %}"><button type="button" class="btn btn-danger
+btn-lg btn-block ">Nuke Calendar</button></a><br>
 {% endblock %}
-</td>
-</tr>
+</div>
+</div>
+<div class="row">
 {% if messages %}
-<tr><td colspan="2">
 <ul class="messages">
     {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
-</td></tr>
+</div>
 {% endif %}
 {% if debug %}
-<tr><td colspan="2">{{debug}}</td></tr>
+<div class="row">
+    <div class="col-md-12">{{debug}}</div>
+</div>
 {% endif %}
-</table>
+
+</div>
+</body>
+</html>

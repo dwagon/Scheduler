@@ -1,16 +1,11 @@
-<tr>
-<td colspan=2>Name: <b>{{client.name}}</b> </td>
-</tr>
-<tr>
-<td>Every {{client.regularity}} weeks </td>
-<td>{{client.get_dayofweek_display}} 
+Name: <b>{{client.name}}</b>
+Every {{client.regularity}} weeks
+{{client.get_dayofweek_display}} 
 {% if client.flexible %} (Flexible) {% endif %}
-for {{client.get_duration_display}} </td>
-</tr>
+for {{client.get_duration_display}} 
 {% if client.startdate or client.enddate %}
-<tr>
-<td> Date Range: </td>
-<td colspan="2">
+
+Date Range: 
 {% if client.startdate %}
     {{client.startdate}} - 
 {% endif %}
@@ -19,11 +14,7 @@ for {{client.get_duration_display}} </td>
 {% else %}
 Onwards
 {% endif %}
-</td>
-</tr>
 {% endif %}
 {% if client.note %}
-    <tr>
-    <td colspan=2>Notes: {{client.note}}</td>
-    </tr>
+Notes: {{client.note}}
 {% endif %}
