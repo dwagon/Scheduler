@@ -1,20 +1,37 @@
-Name: <b>{{client.name}}</b>
-Every {{client.regularity}} weeks
-{{client.get_dayofweek_display}} 
-{% if client.flexible %} (Flexible) {% endif %}
-for {{client.get_duration_display}} 
-{% if client.startdate or client.enddate %}
-
-Date Range: 
-{% if client.startdate %}
-    {{client.startdate}} - 
-{% endif %}
-{% if client.enddate %}
-{{client.enddate}} 
-{% else %}
-Onwards
-{% endif %}
-{% endif %}
-{% if client.note %}
-Notes: {{client.note}}
-{% endif %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <b>{{client.name}}</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            Every {{client.regularity}} weeks
+            {{client.get_dayofweek_display}} 
+            {% if client.flexible %} (Flexible) {% endif %}
+            for {{client.get_duration_display}} 
+        </div>
+    </div>
+    {% if client.startdate or client.enddate %}
+    <div class="row">
+        <div class="col-md-5">
+            Date Range: 
+            {% if client.startdate %}
+                {{client.startdate}} - 
+            {% endif %}
+            {% if client.enddate %}
+                {{client.enddate}} 
+            {% else %}
+                Onwards
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% if client.note %}
+    <div class="row">
+        <div class="col-md-5">
+            Notes: {{client.note}}
+        </div>
+    </div>
+    {% endif %}
+</div>

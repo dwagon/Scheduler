@@ -1,17 +1,4 @@
-<table
-onClick="parent.location='{% url "detailVisit" visit.id %}'"
-onMouseOver="this.bgColor='#dddddd';"
-onMouseOut="this.bgColor='white';"
->
-<tr>
-    <td>Visit:</td>
-    <td>Date: {{visit.date}}
-    {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit </font> {% endif %}
-    </td>
-</tr>
+<a href="{% url 'detailVisit' visit.id %}">{{visit.date}}</a> {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit </font> {% endif %}
 {% if visit.note %}
-<tr>
-    <td colspan="2">Notes: {{visit.note}}</td>
-</tr>
+{{visit.note}}
 {% endif %}
-</table>
