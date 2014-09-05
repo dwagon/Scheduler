@@ -22,6 +22,9 @@ class Client(models.Model):
     startdate = models.DateField(null=True, default=None, help_text="Schedule visits from this date")
     enddate = models.DateField(null=True, default=None, help_text="Schedule visits until this date")
 
+    class Meta:
+        ordering = ['name']
+
     ############################################################################
     def __str__(self):
         return "%s" % self.name

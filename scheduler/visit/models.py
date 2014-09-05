@@ -20,6 +20,7 @@ class Visit(models.Model):
 
     class Meta:
         unique_together = (("client", "date"))
+        ordering = ['date']
 
 
 ################################################################################
