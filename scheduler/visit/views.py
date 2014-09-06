@@ -26,6 +26,9 @@ class VisitDetail(generic.DetailView):
         context = super(VisitDetail, self).get_context_data(*args, **kwargs)
         return context
 
+    def get_success_url(self):
+        return reverse_lazy('clientDetail', kwargs={'pk': self.object.client.id})
+
 
 ################################################################################
 class VisitUpdate(UpdateView):
@@ -33,7 +36,7 @@ class VisitUpdate(UpdateView):
     form_class = VisitForm
 
     def get_success_url(self):
-        return reverse_lazy('detailVisit', kwargs={'pk': self.object.id})
+        return reverse_lazy('visitDetail', kwargs={'pk': self.object.id})
 
 
 ################################################################################
@@ -41,20 +44,20 @@ class VisitDelete(DeleteView):
     model = Visit
 
     def get_success_url(self):
-        return reverse_lazy('detailClient', kwargs={'pk': self.object.client.id})
+        return reverse_lazy('clientDetail', kwargs={'pk': self.object.client.id})
 
 
 ################################################################################
 class VisitNew(CreateView):
     model = Visit
-    success_url = reverse_lazy('detailVisit')
+    success_url = reverse_lazy('visitDetail')
 
 
 ################################################################################
 def clearAllVisits(request):
     from .models import clearVisits
     clearVisits()
-    return redirect("displayThisMonth")
+    return redirect("index")
 
 
 ################################################################################

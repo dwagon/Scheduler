@@ -1,8 +1,8 @@
-{% extends "base/base.html" %}
-{% block content %}
-<ul>
+{% extends "gap/gap_base.html" %}
+{% block gap_content %}
+<ul class="list-group">
 {% for gap in gap_list %}
-    <li><a href="{% url 'detailGap' gap.id %}">{{ gap.desc }}</a></li>
+    <li class="list-group-item"><a href="{% url 'gapDetail' gap.id %}">{{ gap.desc }} ({{gap.start}} - {{gap.end}})</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

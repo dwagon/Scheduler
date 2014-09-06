@@ -1,17 +1,18 @@
-{% extends "base/base.html" %}
-{% block content %}
-<table border=1>
-{% include "client/client_view.html" %}
-<tr>
-<td colspan="1"><a href="{%url 'updateClient' client.id %}">Update Client Details</a></td>
-<td colspan="1"><a href="{%url 'generateVisits' client.id %}">Generate Visits</a></td>
-<td colspan="1"><a href="{%url 'clientDelete' client.id %}">Delete Client</a></td>
-</tr>
-{% for visit in visits %}
-    <tr><td colspan="3">{% include "visit/visit_view.html" %}</td></tr>
-{% endfor %}
-</table>
-{% endblock %}
-{% block rightbar %}
-{% include "client/month.html" %}
+{% extends "client/client_base.html" %}
+{% block client_content %}
+    <div class="row">
+        <div class="col-md-5">
+            {% include "client/client_view.html" %}
+        </div>
+        <div class="col-md-5">
+            {% include 'client/month.html' %}
+        </div>
+    </div>
+    {% for visit in visits %}
+        <div class="row">
+            <div class="col-md-5">
+                {% include "visit/visit_view.html" %}
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

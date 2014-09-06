@@ -1,16 +1,29 @@
 {% extends "base/base.html" %}
 {% block content %}
-<table border=1>
-<tr>
-<td><a href="{% url 'detailClient' visit.client.id %}">{{visit.client}}</a> visit:</td>
-<td>Date: {{visit.date}} </td>
-<td colspan="2">Notes: {{visit.notes}}
-{% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit in visit</font> {% endif %}
-</td>
-</tr>
-<tr>
-<td colspan="1"><a href="{%url 'updateVisit' visit.id %}">Update Visit Details</a></td>
-<td colspan="1"><a href="{%url 'deleteVisit' visit.id %}">Delete Visit</a></td>
-</tr>
-</table>
+
+<div class="row">
+    <div class="col-md-5">
+        <a href="{% url 'clientDetail' visit.client.id %}">{{visit.client}}</a>
+        ({{visit.client.get_duration_display}})
+        Date: {{visit.date}}
+        {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit</font> {% endif %}
+    </div>
+</div>
+{% if visit.note %}
+    <div class="row">
+        <div class="col-md-5">
+            {{visit.note}}
+        </div>
+    </div>
+{% endif %}
+<div class="row">
+    <div class="col-md-2">
+        <a href="{%url 'visitUpdate' visit.id %}"> <button type="button" class="btn btn-primary btn-sm">Edit Visit</button></a>
+    </div>
+    <div class="col-md-2">
+        <a href="{%url 'visitDelete' visit.id %}"> <button type="button" class="btn
+    btn-warning btn-sm">Delete Visit</button></a>
+    </div>
+</div>
+
 {% endblock %}

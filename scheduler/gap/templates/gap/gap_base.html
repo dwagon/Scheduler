@@ -1,0 +1,27 @@
+{% extends "base/base.html" %}
+{% block subbuttonbar %}
+    <div class="col-md-1">
+        <a href="{% url 'gapIndex' %}" role="button" class="btn btn-info bt-sm">Gaps</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'gapNew' %}" type="button" class="btn btn-primary btn-sm btn-block">New</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'gapList' %}" type="button" class="btn btn-primary btn-sm btn-block">Existing</a>
+    </div>
+    <div class="col-md-1">
+        {% if gap %}
+        <a href="{% url 'gapDelete' gap.id %}" type="button" class="btn btn-primary btn-sm btn-block">Delete</a>
+        {% endif %}
+    </div>
+    <div class="col-md-1">
+        {% if gap %}
+        <a href="{% url 'gapUpdate' gap.id %}" type="button" class="btn btn-primary btn-sm btn-block">Update</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% block gap_content %}
+    {% endblock %}
+{% endblock %}

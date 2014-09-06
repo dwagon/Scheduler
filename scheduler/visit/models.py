@@ -2,7 +2,7 @@ import datetime
 
 from django.db import models
 
-from client.models import Client, Notes
+from client.models import Client
 from gap.models import inGap
 
 
@@ -13,13 +13,14 @@ class Visit(models.Model):
     client = models.ForeignKey(Client)
     good = models.BooleanField(default=True)
     date = models.DateField()
-    note = models.ForeignKey(Notes, null=True, blank=True)
+    note = models.CharField(max_length=250, blank=True)
 
     def __str__(self):
         return "Visit %s on %s" % (self.client, self.date)
 
     class Meta:
         unique_together = (("client", "date"))
+        ordering = ['date']
 
 
 ################################################################################

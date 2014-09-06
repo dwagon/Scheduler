@@ -40,13 +40,16 @@ class ClientDetail(generic.DetailView):
 ################################################################################
 class ClientUpdate(UpdateView):
     model = Client
-    success_url = reverse_lazy('listClients')
+    form_class = ClientForm
+
+    def get_success_url(self):
+        return reverse_lazy('clientDetail', kwargs={'pk': self.object.id})
 
 
 ################################################################################
 class ClientDelete(DeleteView):
     model = Client
-    success_url = reverse_lazy('listClients')
+    success_url = reverse_lazy('clientList')
 
 
 ################################################################################
@@ -55,23 +58,43 @@ class ClientNew(CreateView):
     form_class = ClientForm
 
     def get_success_url(self):
-        return reverse_lazy('detailClient', kwargs={'pk': self.object.id})
+        return reverse_lazy('clientDetail', kwargs={'pk': self.object.id})
 
 
 ################################################################################
-def generateVisits(request, pk):
-    start = datetime.date(2014, 1, 1)
-    end = datetime.date(2015, 12, 31)
+def clientDeleteVisits(requst, pk):
+    """ Delete all the visits for a client """
     c = Client.objects.get(pk=pk)
+    for v in Visit.objects.filter(client=c):
+        v.delete()
+    return redirect("clientDetail", pk=pk)
+
+
+################################################################################
+def clientGenerateVisits(request, pk):
+    c = Client.objects.get(pk=pk)
+    if c.startdate:
+        start = c.startdate
+    else:
+        start = datetime.date(2014, 1, 1)
+    if c.enddate:
+        end = c.enddate
+    else:
+        end = datetime.date(2015, 12, 31)
     msgs = makeVisits(c, start, end)
     for msg in msgs:
         messages.info(request, msg)
-    return redirect("detailClient", pk=pk)
+    return redirect("clientDetail", pk=pk)
 
 
 ################################################################################
 def displayDay(request, year=None, month=None, day=None):
     return redirect("displayThisMonth")
+
+
+################################################################################
+def clientIndex(request):
+    return render_to_response('client/client_index.html', {})
 
 
 ################################################################################

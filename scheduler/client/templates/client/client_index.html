@@ -1,0 +1,11 @@
+{% extends "client/client_base.html" %}
+
+{% block client_content %}
+    {% for client in client_list %}
+        <div class="row">
+            <div class="col-md-5">
+                <a href="{% url 'clientDetail' client.id %}">{{ client.name }}</a></li>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

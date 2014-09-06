@@ -1,10 +1,9 @@
-{% extends "base/base.html" %}
-{% block content %}
-<table border=1>
-{% include "gap/gap_view.html" %}
-<tr>
-<td><a href="{% url 'updateGap' gap.id %}">Update Gap Details</a></td>
-<td><a href="{% url 'deleteGap' gap.id %}">Delete Gap</a></td>
-</tr>
-</table>
+{% extends "gap/gap_base.html" %}
+{% block gap_content %}
+
+<div class="row">
+    <div class="col-md-5">
+        {% include "gap/gap_view.html" %}
+    </div>
+</div>
 {% endblock %}

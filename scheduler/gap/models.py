@@ -9,6 +9,13 @@ class Gap(models.Model):
     start = models.DateField()
     end = models.DateField()
 
+    class Meta:
+        ordering = ['desc']
+
+    ############################################################################
+    def __str__(self):
+        return "%s: %s to %s" % (self.desc, self.start, self.end)
+
     ############################################################################
     def inGap(self, d):
         """ Is the date specified in the gap? """

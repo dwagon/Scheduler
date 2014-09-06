@@ -6,13 +6,13 @@
 <td><a href= "{% url "displayYearMonthPage" year month "next" %}">Next &gt;&gt;</a></td>
 </tr>
 <tr>
-<td class="empty">&nbsp;Mon&nbsp;</td>
-<td class="empty">&nbsp;Tue&nbsp;</td>
-<td class="empty">&nbsp;Wed&nbsp;</td>
-<td class="empty">&nbsp;Thu&nbsp;</td>
-<td class="empty">&nbsp;Fri&nbsp;</td>
-<td class="empty">&nbsp;Sat&nbsp;</td>
-<td class="empty">&nbsp;Sun&nbsp;</td>
+<td class="empty">&nbsp;Monday&nbsp;</td>
+<td class="empty">&nbsp;Tuesday&nbsp;</td>
+<td class="empty">&nbsp;Wednesday&nbsp;</td>
+<td class="empty">&nbsp;Thursday&nbsp;</td>
+<td class="empty">&nbsp;Friday&nbsp;</td>
+<td class="empty">&nbsp;Saturday&nbsp;</td>
+<td class="empty">&nbsp;Sunday&nbsp;</td>
 </tr>
 
 {% for week in month_days %}
@@ -41,8 +41,8 @@
         {% for visit in visits %}
             <tr><td>
             <font color={% if visit.good %}"black"{% else %}"red"{%endif%}>
-                <a href="{% url "detailClient" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
-                <a href="{% url "detailVisit" visit.id %}">{{visit.client.get_duration_display }}</a>
+                <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
+                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }}</a>
             </font>
             </td></tr>
         {% endfor %}

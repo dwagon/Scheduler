@@ -1,36 +1,92 @@
-<table border="1">
-<tr><td colspan="3">{% block topbar %} {% endblock %}</td></tr>
-<tr>
-<td rowspan="3" width=10% valign="top">
-{% block sidebar %}
-<a href="{% url 'newClient' %}">New Client</a><br>
-<a href="{% url 'listClients' %}">Existing Clients</a><br>
-<a href="{% url 'displayThisMonth' %}">View Calendar</a><br>
-<a href="{% url 'newGap' %}">New Gap</a><br>
-<a href="{% url 'listGap' %}">Existing Gaps</a><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../../favicon.ico">
+<title>Scheduler</title>
+<!-- Bootstrap core CSS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/static/b/js/bootstrap.min.js"></script>
+<link href="/static/b/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container">
+<div class="row">
+    <div class="col-md-12">{% block topbar %} {% endblock %}</div>
+</div>
+
+<div class="row">
+{% block buttonbar %}
+    <div class="col-md-1">
+        <a href="{% url 'index' %}" role="button" class="btn btn-info bt-lg">Scheduler</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'clientIndex' %}" role="button" class="btn btn-primary">Clients</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'displayThisMonth' %}" role="button" class="btn btn-primary">Calendar</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'gapIndex' %}" role="button" class="btn btn-primary">Gaps</a>
+    </div>
+    <div class="col-md-6">
+        &nbsp;
+    </div>
+    <div class="col-md-1">
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="cfgmenu" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-cog"></span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="cfgmenu">
+                <li role="presentation"><a role="menuitem" href="{% url 'generateAllVisits' %}">Generate all visits</a></li>
+                <li role="presentation"><a role="menuitem" href="{% url 'clearAllVisits' %}">Clear all visits</a></li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
-</td><td>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+    <hr>
+    </div>
+</div>
+
+<div class="row">
+    {% block subbuttonbar %}
+    {% endblock %}
+</div>
+
+
+<div class="row">
+<div class="col-md-10">
 {% block content %}
 ContentBlock
 {% endblock %}
-</td>
-<td valign="top">
-{% block rightbar %}
-<a href="{% url 'generateAllVisits' %}">Initialise Calendar</a><br>
-<a href="{% url 'clearAllVisits' %}">Nuke Calendar</a><br>
-{% endblock %}
-</td>
-</tr>
+</div>
+</div>
+
+<div class="row">
 {% if messages %}
-<tr><td colspan="2">
 <ul class="messages">
     {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
-</td></tr>
+</div>
 {% endif %}
 {% if debug %}
-<tr><td colspan="2">{{debug}}</td></tr>
+<div class="row">
+    <div class="col-md-12">{{debug}}</div>
+</div>
 {% endif %}
-</table>
+
+</div>
+</body>
+</html>
