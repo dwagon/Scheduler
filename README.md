@@ -14,6 +14,7 @@ Release 0.3
 * Implemented start and end dates for client visits
 * Added notes
 * Django 1.7 compatible
+* Implemented bootstrap
 
 Release 0.2
 -----------
