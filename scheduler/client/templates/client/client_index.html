@@ -4,7 +4,7 @@
     {% for client in client_list %}
         <div class="row">
             <div class="col-md-5">
-                <a href="{% url 'detailClient' client.id %}">{{ client.name }}</a></li>
+                <a href="{% url 'clientDetail' client.id %}">{{ client.name }}</a></li>
             </div>
         </div>
     {% endfor %}

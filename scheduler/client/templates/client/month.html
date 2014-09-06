@@ -41,8 +41,8 @@
         {% for visit in visits %}
             <tr><td>
             <font color={% if visit.good %}"black"{% else %}"red"{%endif%}>
-                <a href="{% url "detailClient" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
-                <a href="{% url "detailVisit" visit.id %}">{{visit.client.get_duration_display }}</a>
+                <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
+                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }}</a>
             </font>
             </td></tr>
         {% endfor %}

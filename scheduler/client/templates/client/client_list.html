@@ -2,7 +2,9 @@
 {% block client_content %}
 <div="list-group">
 {% for client in client_list %}
-    <a href="{% url 'detailClient' client.id %}" class="list-group-item">{{ client.name }}</a>
+    <div class="col-md-2">
+        <a href="{% url 'clientDetail' client.id %}" class="list-group-item">{{ client.name }}</a>
+    </div>
 {% endfor %}
 </div>
 {% endblock %}

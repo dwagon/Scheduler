@@ -67,7 +67,7 @@ def clientDeleteVisits(requst, pk):
     c = Client.objects.get(pk=pk)
     for v in Visit.objects.filter(client=c):
         v.delete()
-    return redirect("detailClient", pk=pk)
+    return redirect("clientDetail", pk=pk)
 
 
 ################################################################################
@@ -84,7 +84,7 @@ def clientGenerateVisits(request, pk):
     msgs = makeVisits(c, start, end)
     for msg in msgs:
         messages.info(request, msg)
-    return redirect("detailClient", pk=pk)
+    return redirect("clientDetail", pk=pk)
 
 
 ################################################################################

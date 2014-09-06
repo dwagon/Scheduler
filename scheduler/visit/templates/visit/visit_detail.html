@@ -3,7 +3,7 @@
 
 <div class="row">
     <div class="col-md-5">
-        <a href="{% url 'detailClient' visit.client.id %}">{{visit.client}}</a>
+        <a href="{% url 'clientDetail' visit.client.id %}">{{visit.client}}</a>
         ({{visit.client.get_duration_display}})
         Date: {{visit.date}}
         {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit</font> {% endif %}
@@ -18,10 +18,10 @@
 {% endif %}
 <div class="row">
     <div class="col-md-2">
-        <a href="{%url 'updateVisit' visit.id %}"> <button type="button" class="btn btn-primary btn-sm">Edit Visit</button></a>
+        <a href="{%url 'visitUpdate' visit.id %}"> <button type="button" class="btn btn-primary btn-sm">Edit Visit</button></a>
     </div>
     <div class="col-md-2">
-        <a href="{%url 'deleteVisit' visit.id %}"> <button type="button" class="btn
+        <a href="{%url 'visitDelete' visit.id %}"> <button type="button" class="btn
     btn-warning btn-sm">Delete Visit</button></a>
     </div>
 </div>
