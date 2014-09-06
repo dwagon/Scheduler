@@ -1,10 +1,8 @@
-{% extends "base/base.html" %}
-{% block content %}
+{% extends "client/client_base.html" %}
+{% block client_content %}
+<div="list-group">
 {% for client in client_list %}
-    <div class="row">
-        <div class="col-md-5">
-            <a href="{% url 'detailClient' client.id %}">{{ client.name }}</a></li>
-        </div>
-    </div>
+    <a href="{% url 'detailClient' client.id %}" class="list-group-item">{{ client.name }}</a>
 {% endfor %}
+</div>
 {% endblock %}

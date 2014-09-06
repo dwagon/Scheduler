@@ -1,43 +1,15 @@
-{% extends "base/base.html" %}
-{% block content %}
-<table border=1>
-{% include "client/client_view.html" %}
-<div class="row">
-    <div class="col-md-2">
-        <a href="{%url 'updateClient' client.id %}">
-            <button type="button" class="btn btn-primary btn-sm">Update Client</button>
-        </a>
+{% extends "client/client_base.html" %}
+{% block client_content %}
+    <div class="row">
+        <div class="col-md-5">
+            {% include "client/client_view.html" %}
+        </div>
     </div>
-    <div class="col-md-2">
-        <a href="{%url 'clientGenerateVisits' client.id %}">
-            <button type="button" class="btn btn-primary btn-sm">Generate Visits</button>
-        </a>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-        <a href="{%url 'clientDelete' client.id %}">
-            <button type="button" class="btn btn-warning btn-sm">Delete Client</button>
-        </a>
-    </div>
-{% if visits %}
-    <div class="col-md-2">
-    <a href="{%url 'clientDeleteVisits' client.id %}">
-        <button type="button" class="btn btn-warning btn-sm">Delete all visits</button>
-    </a>
-    </div>
-{% endif %}
-</div>
-{% for visit in visits %}
-<div class="row">
-    <div class="col-md-5">
-        {% include "visit/visit_view.html" %}
-    </div>
-</div>
-{% endfor %}
-{% endblock %}
-{% block rightbar %}
-<div class="col-md-5">
-{% include "client/month.html" %}
-</div>
+    {% for visit in visits %}
+        <div class="row">
+            <div class="col-md-5">
+                {% include "visit/visit_view.html" %}
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

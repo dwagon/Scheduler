@@ -43,13 +43,13 @@ class ClientUpdate(UpdateView):
     form_class = ClientForm
 
     def get_success_url(self):
-        return reverse_lazy('detailClient', kwargs={'pk': self.object.id})
+        return reverse_lazy('clientDetail', kwargs={'pk': self.object.id})
 
 
 ################################################################################
 class ClientDelete(DeleteView):
     model = Client
-    success_url = reverse_lazy('listClients')
+    success_url = reverse_lazy('clientList')
 
 
 ################################################################################
@@ -58,7 +58,7 @@ class ClientNew(CreateView):
     form_class = ClientForm
 
     def get_success_url(self):
-        return reverse_lazy('detailClient', kwargs={'pk': self.object.id})
+        return reverse_lazy('clientDetail', kwargs={'pk': self.object.id})
 
 
 ################################################################################
@@ -90,6 +90,11 @@ def clientGenerateVisits(request, pk):
 ################################################################################
 def displayDay(request, year=None, month=None, day=None):
     return redirect("displayThisMonth")
+
+
+################################################################################
+def clientIndex(request):
+    return render_to_response('client/client_index.html', {})
 
 
 ################################################################################
