@@ -9,11 +9,11 @@
 <link rel="icon" href="../../favicon.ico">
 <title>Scheduler</title>
 <!-- Bootstrap core CSS -->
-<link href="/static/b/css/bootstrap.min.css"
-rel="stylesheet">
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/static/b/js/bootstrap.min.js"></script>
+<link href="/static/b/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
 <div class="container">
 <div class="row">
@@ -35,9 +35,19 @@ rel="stylesheet">
         <a href="{% url 'gapIndex' %}" role="button" class="btn btn-primary">Gaps</a>
     </div>
     <div class="col-md-6">
+        &nbsp;
     </div>
     <div class="col-md-1">
-        <a href="{% url 'miscIndex' %}" role="button" class="btn btn-primary">Misc</a>
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="cfgmenu" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-cog"></span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="cfgmenu">
+                <li role="presentation"><a role="menuitem" href="{% url 'generateAllVisits' %}">Generate all visits</a></li>
+                <li role="presentation"><a role="menuitem" href="{% url 'clearAllVisits' %}">Clear all visits</a></li>
+            </ul>
+        </div>
     </div>
 {% endblock %}
 </div>

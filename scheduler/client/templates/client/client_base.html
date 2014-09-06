@@ -36,11 +36,12 @@
             {# include "client/month.html" #}
         {% endif %}
     </div>
-</div>
 {% endblock %}
 
 {% block content %}
+    <div class="row">
     {% block client_content %}
     Client Content
     {% endblock %}
+    </div>
 {% endblock %}

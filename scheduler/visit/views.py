@@ -57,7 +57,7 @@ class VisitNew(CreateView):
 def clearAllVisits(request):
     from .models import clearVisits
     clearVisits()
-    return redirect("displayThisMonth")
+    return redirect("index")
 
 
 ################################################################################

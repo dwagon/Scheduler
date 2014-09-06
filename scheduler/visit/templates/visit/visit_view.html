@@ -1,4 +1,6 @@
-<a href="{% url 'detailVisit' visit.id %}">{{visit.date}}</a> {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit </font> {% endif %}
-{% if visit.note %}
-{{visit.note}}
-{% endif %}
+<div class="panel-body">
+    <a href="{% url 'detailVisit' visit.id %}">{{visit.date}}</a> {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit </font> {% endif %}
+    {% if visit.note %}
+        {{visit.note}}
+    {% endif %}
+</div>
