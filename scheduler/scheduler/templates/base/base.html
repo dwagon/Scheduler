@@ -16,42 +16,52 @@ rel="stylesheet">
 </head>
 <body>
 <div class="container">
+<div class="row">
+    <div class="col-md-12">{% block topbar %} {% endblock %}</div>
+</div>
 
 <div class="row">
-    <div class="col-md-1">Scheduler</div>
-    <div class="col-md-11">{% block topbar %} {% endblock %}</div>
-</div>
-<div class="row">
-    <div class="col-md-2">
-{% block sidebar %}
-<a href="{% url 'index' %}"><button type="button" class="btn btn-primary btn-lg
-btn-block ">Home</button></a><br>
-<a href="{% url 'newClient' %}"><button type="button" class="btn btn-primary
-btn-lg btn-block ">New Client</button></a><br>
-<a href="{% url 'listClients' %}"><button type="button" class="btn btn-primary
-btn-lg btn-block ">Existing Clients</button></a><br>
-<a href="{% url 'displayThisMonth' %}"><button type="button" class="btn
-btn-primary btn-lg btn-block ">View Calendar</button></a><br>
-<a href="{% url 'newGap' %}"><button type="button" class="btn btn-primary btn-lg
-btn-block ">New Gap</button></a><br>
-<a href="{% url 'listGap' %}"><button type="button" class="btn btn-primary btn-lg
-btn-block ">Existing Gaps</button></a><br>
-{% endblock %}
+{% block buttonbar %}
+    <div class="col-md-1">
+        <a href="{% url 'index' %}" role="button" class="btn btn-info bt-lg">Scheduler</a>
     </div>
-<div class="col-md-8">
+    <div class="col-md-1">
+        <a href="{% url 'clientIndex' %}" role="button" class="btn btn-primary">Clients</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'displayThisMonth' %}" role="button" class="btn btn-primary">Calendar</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'gapIndex' %}" role="button" class="btn btn-primary">Gaps</a>
+    </div>
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'miscIndex' %}" role="button" class="btn btn-primary">Misc</a>
+    </div>
+{% endblock %}
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+    <hr>
+    </div>
+</div>
+
+<div class="row">
+    {% block subbuttonbar %}
+    {% endblock %}
+</div>
+
+
+<div class="row">
+<div class="col-md-10">
 {% block content %}
 ContentBlock
 {% endblock %}
 </div>
-<div class="col-md-2">
-{% block rightbar %}
-<a href="{% url 'generateAllVisits' %}"><button type="button" class="btn
-btn-danger btn-lg btn-block ">Initialise Calendar</button></a></br>
-<a href="{% url 'clearAllVisits' %}"><button type="button" class="btn btn-danger
-btn-lg btn-block ">Nuke Calendar</button></a><br>
-{% endblock %}
 </div>
-</div>
+
 <div class="row">
 {% if messages %}
 <ul class="messages">

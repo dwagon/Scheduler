@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+{% block subbuttonbar %}
+<div class="col-md-1">
+<a href="{% url 'miscIndex' %}" role="button" class="btn btn-info bt-sm">Misc</a>
+</div>
+<div class="col-md-1">
+<a href="{% url 'generateAllVisits' %}" type="button" class="btn btn-primary btn-sm btn-block">Gen All Visits</a>
+</div>
+<div class="col-md-1">
+<a href="{% url 'clearAllVisits' %}" type="button" class="btn btn-primary btn-sm btn-block">Nuke Calendar</a>
+</div>
+{% endblock %}
+
+{% block content %}
+{% block gap_content %}
+{% endblock %}
+{% endblock %}
