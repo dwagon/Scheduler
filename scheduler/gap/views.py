@@ -20,13 +20,13 @@ class GapDetail(generic.DetailView):
 ################################################################################
 class GapUpdate(UpdateView):
     model = Gap
-    success_url = reverse_lazy('listGap')
+    success_url = reverse_lazy('gapList')
 
 
 ################################################################################
 class GapDelete(DeleteView):
     model = Gap
-    success_url = reverse_lazy('listGap')
+    success_url = reverse_lazy('gapList')
 
 
 ################################################################################
@@ -35,7 +35,7 @@ class GapNew(CreateView):
     form_class = GapForm
 
     def get_success_url(self):
-        return reverse_lazy('detailGap', kwargs={'pk': self.object.id})
+        return reverse_lazy('gapDetail', kwargs={'pk': self.object.id})
 
 
 ################################################################################
