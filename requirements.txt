@@ -1,5 +1,4 @@
-Django
-South
+Django==1.7
 psycopg2
 djangorestframework
 fabric
