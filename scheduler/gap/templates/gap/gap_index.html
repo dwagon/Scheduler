@@ -1,0 +1,17 @@
+{% extends "gap/gap_base.html" %}
+
+{% block gap_content %}
+<div class="row">
+    <div class="col-md-5">
+        {% include "gap/gap_view.html" %}
+    </div>
+</div>
+
+{% for visit in visits %}
+<div class="row">
+    <div class="col-md-5">
+        {% include "visit/visit_view.html" %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
