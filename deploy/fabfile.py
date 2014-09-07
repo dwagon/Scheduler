@@ -88,7 +88,7 @@ def install_virtualenv():
 def warmup():
     with cd(basedir):
         sudo("%s/python ./scheduler/manage.py migrate" % bindir, user=user)
-        sudo("%s/python ./scheduler/manager.py collectstatic" % bindir)
+        sudo("%s/python ./scheduler/manage.py collectstatic --noinput" % bindir)
 
 
 @task
