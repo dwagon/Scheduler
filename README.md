@@ -9,6 +9,10 @@ Features:
 CHANGELOG
 =========
 
+Release 0.4
+-----------
+* Print version of calendar 
+
 Release 0.3
 -----------
 * Implemented start and end dates for client visits
