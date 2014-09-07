@@ -45,6 +45,8 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="cfgmenu">
+                <li role="presentation"><a role="menuitem" href="{% url 'exportData' %}">Export Visit Data</a></li>
+                <li role="presentation" class="divider"></li>
                 <li role="presentation"><a role="menuitem" href="{% url 'generateAllVisits' %}">Generate all visits</a></li>
                 <li role="presentation"><a role="menuitem" href="{% url 'clearAllVisits' %}">Clear all visits</a></li>
             </ul>

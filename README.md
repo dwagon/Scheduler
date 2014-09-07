@@ -12,6 +12,7 @@ CHANGELOG
 Release 0.4
 -----------
 * Print version of calendar 
+* Export of client data
 
 Release 0.3
 -----------
