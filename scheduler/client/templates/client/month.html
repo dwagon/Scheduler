@@ -1,9 +1,15 @@
 <div class="month">
-<table border=1>
+<table border=1 width="90%">
 <tr>
-<td> <a href= "{% url "displayYearMonthPage" year month "prev" %}">&lt;&lt; Prev</a></td>
-<td colspan="5" align="center"> <strong>{{ mname }} {{ year }} {{client}}</strong></td>
-<td><a href= "{% url "displayYearMonthPage" year month "next" %}">Next &gt;&gt;</a></td>
+    <td>
+        <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'prev' %}">&lt;&lt; Prev</a>
+    </td>
+    <td colspan="5" align="center">
+        <strong>{{ mname }} {{ year }} {{client}}</strong>
+    </td>
+    <td>
+        <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'next' %}">Next &gt;&gt;</a>
+    </td>
 </tr>
 <tr>
 <td class="empty">&nbsp;Monday&nbsp;</td>
@@ -31,7 +37,7 @@
         <!-- Day number and entry snippets -->
         {% if day != 0 %}
         <table>
-            <tr valign="top">
+            <tr style="vertical-align:top">
             {% if gap %}
                 <td bgColor="red"> {{day}} {{ gap.desc }}</td>
             {% else %}
@@ -39,7 +45,7 @@
             {% endif %}
             </tr>
         {% for visit in visits %}
-            <tr><td>
+            <tr valign="bottom"><td>
             <font color={% if visit.good %}"black"{% else %}"red"{%endif%}>
                 <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
                 <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }}</a>
