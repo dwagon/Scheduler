@@ -4,11 +4,8 @@ from .models import Gap
 
 
 class GapForm(forms.ModelForm):
-    desc = forms.CharField()
-    start = forms.DateField()
-    end = forms.DateField()
-
     class Meta:
         model = Gap
+        fields = '__all__'
 
 # EOF
