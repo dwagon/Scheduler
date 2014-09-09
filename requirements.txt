@@ -1,5 +1,6 @@
 Django==1.7
 psycopg2
 djangorestframework
+django-debug-toolbar
 fabric
 gunicorn
