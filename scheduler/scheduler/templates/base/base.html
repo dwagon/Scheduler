@@ -27,18 +27,32 @@
         <a href="{% url 'index' %}" role="button" class="btn btn-info bt-lg">Scheduler</a>
     </div>
     <div class="col-md-1">
-        <a href="{% url 'clientIndex' %}" role="button" class="btn btn-primary">Clients</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'clientIndex' %}" role="button" class="btn btn-primary">Clients</a>
+        {% endif %}
     </div>
     <div class="col-md-1">
-        <a href="{% url 'displayThisMonth' %}" role="button" class="btn btn-primary">Calendar</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'displayThisMonth' %}" role="button" class="btn btn-primary">Calendar</a>
+        {% endif %}
     </div>
     <div class="col-md-1">
-        <a href="{% url 'gapIndex' %}" role="button" class="btn btn-primary">Gaps</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'gapIndex' %}" role="button" class="btn btn-primary">Gaps</a>
+        {% endif %}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         &nbsp;
     </div>
     <div class="col-md-1">
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" role="button" class="btn btn-primary"><span class=  "glyphicon glyphicon-user">Logout</span></a>
+    {% else %}
+        <a href="{% url 'login' %}" role="button" class="btn btn-primary"><span class="glyphicon glyphicon-user">Login</span></a>
+    {% endif %}
+    </div>
+    <div class="col-md-1">
+        {% if user.is_authenticated %}
         <div class="dropdown">
             <button class="btn btn-default dropdown-toggle" type="button" id="cfgmenu" data-toggle="dropdown">
                 <span class="glyphicon glyphicon-cog"></span>
@@ -47,11 +61,14 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="cfgmenu">
                 <li role="presentation"><a role="menuitem" href="{% url 'exportData' %}">Export Visit Data</a></li>
                 <li role="presentation" class="divider"></li>
+                <li role="presentation"><a role="menuitem" href="{% url 'index' %}">{{user.username}}</a></li>
+                <li role="presentation" class="divider"></li>
                 <li role="presentation"><a role="menuitem" href="{% url 'generateAllVisits' %}">Generate all visits</a></li>
                 <li role="presentation"><a role="menuitem" href="{% url 'clearAllVisits' %}">Clear all visits</a></li>
                 <li role="presentation"><a role="menuitem" href="{% url 'deleteAllClients' %}">Delete all clients</a></li>
             </ul>
         </div>
+    {% endif %}
     </div>
 {% endblock %}
 </div>
@@ -85,12 +102,6 @@ ContentBlock
 </ul>
 </div>
 {% endif %}
-{% if debug %}
-<div class="row">
-    <div class="col-md-12">{{debug}}</div>
-</div>
-{% endif %}
-
 </div>
 </body>
 </html>
