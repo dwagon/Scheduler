@@ -156,4 +156,14 @@ def displayMonth(request, year=None, month=None, change=None, client=None, templ
     d = monthDetail(year, month, change, client)
     return render_to_response(template, d)
 
+
+################################################################################
+def deleteAllClients(request):
+    for c in Client.objects.all():
+        for v in Visit.objects.filter(client=c):
+            v.delete()
+        c.delete()
+    return redirect("index")
+
+
 # EOF
