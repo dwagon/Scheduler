@@ -19,8 +19,8 @@ class Client(models.Model):
     duration = models.SmallIntegerField(choices=DUR_CHOICES)
     note = models.CharField(max_length=250, blank=True)
     flexible = models.BooleanField(default=False, help_text="Try adjacent days to fit in visit")
-    startdate = models.DateField(null=True, default=None, help_text="Schedule visits from this date")
-    enddate = models.DateField(null=True, default=None, help_text="Schedule visits until this date")
+    startdate = models.DateField(null=True, default=None, help_text="Schedule visits from this date (YYYY-MM-DD)")
+    enddate = models.DateField(null=True, default=None, help_text="Schedule visits until this date (YYYY-MM-DD)")
 
     class Meta:
         ordering = ['name']
