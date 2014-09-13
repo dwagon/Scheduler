@@ -1,2 +1,14 @@
-<b>{{gap.desc}}</b>
-{{gap.start}} - {{gap.end}}
+<div class="panel panel-primary">
+    <div class="panel-heading">{{gap.desc}}</div>
+    <div class="panel-body">
+        {{gap.start}} - {{gap.end}}
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{% url 'gapDelete' gap.id %}" type="button" class="btn btn-primary btn-sm">Delete</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'gapUpdate' gap.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
+        </div>
+    </div>
+</div>
