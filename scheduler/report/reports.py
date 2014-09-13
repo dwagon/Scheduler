@@ -9,6 +9,8 @@ from visit.models import Visit
 
 mnames = "January February March April May June July August September October November December".split()
 
+allvisits = None
+
 
 ###############################################################################
 @login_required
@@ -63,9 +65,13 @@ def monthDetail(year=None, month=None, change=None, client=None):
 
 ################################################################################
 def dayDetails(year, month, day):
+    global allvisits
+    if not allvisits:
+        allvisits = Visit.objects.all()
+
     dt = datetime.date(year, month, day)
     gap = inGap(dt)
-    visits = Visit.objects.filter(date=dt)
+    visits = allvisits.filter(date=dt)
     today = (dt == datetime.date.today())
     return {
         'date': dt,
@@ -90,7 +96,15 @@ def displayMonth(request, year=None, month=None, change=None, client=None, templ
 ################################################################################
 @login_required
 def displayYear(request, year=None):
-    pass
+    today = datetime.date.today()
+    if year is None:
+        year = today.year
+    else:
+        year = int(year)
+    d = {}
+    for month in range(1, 13):
+        d["m%s" % month] = monthDetail(year, month)
+    return render(request, "report/display_year.html", d)
 
 
 ################################################################################
