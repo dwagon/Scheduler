@@ -50,24 +50,33 @@ def monthDetail(year=None, month=None, change=None, client=None):
     # make month lists containing list of days for each week
     # each day tuple will contain list of visits and 'current' indicator
     for day in cal.itermonthdays(year, month):
-        current = False
-        visits = None
-        gap = None
-        dt = None
         if day:
-            dt = datetime.date(year, month, day)
-            if dt == today:
-                current = True
-            gap = inGap(dt)
-            visits = Visit.objects.filter(date=dt)
-            if client:
-                visits = visits.filter(client=client)
-
-        lst[week].append((day, visits, current, gap, dt))
+            dd = dayDetails(year, month, day)
+            lst[week].append(dd)
+        else:
+            lst[week].append({'real': False})
         if len(lst[week]) == 7:
             lst.append([])
             week += 1
     return {'year': year, 'month': month, 'month_days': lst, 'mname': mnames[month-1]}
+
+
+################################################################################
+def dayDetails(year, month, day):
+    dt = datetime.date(year, month, day)
+    gap = inGap(dt)
+    visits = Visit.objects.filter(date=dt)
+    today = (dt == datetime.date.today())
+    return {
+        'date': dt,
+        'gap': gap,
+        'visits': visits,
+        'today': today,
+        'day': dt.day,
+        'month': dt.month,
+        'year': dt.year,
+        'real': True
+        }
 
 
 ################################################################################

@@ -1,5 +1,5 @@
-<div class="month">
-<table border=1 width="90%">
+<div class="table-responsive">
+<table border="1" width="90%" class="table">
 <tr>
     <td>
         <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'prev' %}">&lt;&lt; Prev</a>
@@ -23,36 +23,30 @@
 
 {% for week in month_days %}
     <tr>
-    {% for day, visits, current, gap, d in week %}
+    {% for day in week %}
         <!-- TD style: empty | day | current; onClick handler and highlight -->
-        <td class= {% if day == 0 %}"empty"{% endif %}
-        {% if day != 0 and not current %}"day"{% endif %}
-        {% if day != 0 and current %}"current"{% endif %}
-        {% if day != 0 %}
-            onClick="parent.location='{% url "displayDay" year month day %}'"
-            onMouseOver="this.bgColor='#eeeeee';"
-            onMouseOut="this.bgColor='white';"
-        {% endif %} %>
-
+        <td>
         <!-- Day number and entry snippets -->
-        {% if day != 0 %}
-        <table>
-            <tr style="vertical-align:top">
-            {% if gap %}
-                <td bgColor="red"> {{day}} {{ gap.desc }}</td>
-            {% else %}
-                <td>{{ day }}</td>
-            {% endif %}
-            </tr>
-        {% for visit in visits %}
-            <tr valign="bottom"><td>
-            <font color={% if visit.good %}"black"{% else %}"red"{%endif%}>
-                <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
-                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }}</a>
-            </font>
-            </td></tr>
-        {% endfor %}
-        </table>
+        {% if day.real %}
+            <table class="table">
+                <tr style="vertical-align:top">
+                    {% if day.gap %}
+                        <td class="success"> {{day.day}} {{ day.gap.desc }}</td>
+                    {% else %}
+                        <td class="warning">{{ day.day }}</td>
+                    {% endif %}
+                </tr>
+                {% for visit in day.visits %}
+                    <tr height=90% style="vertical-align:bottom">
+                        <td class="info">
+                            <font color="{% if visit.good %}black{% else %}red{%endif%}">
+                                <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
+                                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }}</a>
+                            </font>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
         {% endif %}
         </td>
     {% endfor %}
