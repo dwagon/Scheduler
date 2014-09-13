@@ -50,10 +50,10 @@ def isWeekend(d):
 ################################################################################
 def canFit(dt, dur):
     visits = Visit.objects.filter(date=dt)
-    capacity = 8
+    capacity = 8    # Hours in the day
     for v in visits:
         capacity -= v.client.duration
-        capacity -= 1   # Allow for travel
+        # capacity -= 1   # Allow for travel
     return capacity >= dur
 
 
