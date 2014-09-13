@@ -53,7 +53,7 @@ def monthDetail(year=None, month=None, change=None, client=None):
     # each day tuple will contain list of visits and 'current' indicator
     for day in cal.itermonthdays(year, month):
         if day:
-            dd = dayDetails(year, month, day)
+            dd = dayDetails(year, month, day, client)
             lst[week].append(dd)
         else:
             lst[week].append({'real': False})
@@ -64,9 +64,10 @@ def monthDetail(year=None, month=None, change=None, client=None):
 
 
 ################################################################################
-def dayDetails(year, month, day):
-    global allvisits
-    if not allvisits:
+def dayDetails(year, month, day, client=None):
+    if client:
+        allvisits = Visit.objects.filter(client=client)
+    else:
         allvisits = Visit.objects.all()
 
     dt = datetime.date(year, month, day)
