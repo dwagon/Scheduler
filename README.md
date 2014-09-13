@@ -12,6 +12,8 @@ CHANGELOG
 Release 0.4
 -----------
 * Print version of calendar 
+* Redid calendary system
+* Added year calendar
 * Export of client data
 
 Release 0.3
