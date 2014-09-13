@@ -42,15 +42,20 @@
                 </tr>
                 {% for visit in day.visits %}
                     <tr height=90% style="vertical-align:bottom">
-                        <td class="info">
-                            <font color="{% if visit.good %}black{% else %}red{%endif%}">
+                        <td 
+                            {% if visit.good %}
+                            class="info"
+                                {% else %}
+                            class="danger"
+                                {% endif %}
+                        >
                             {% if yearmode != True %}
                                 <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
                             {% else %}
                                 <b>{{ visit.client.name }}</b>:
                             {% endif %}
                             {% if yearmode != True %}
-                                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }}</a>
+                                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }} {% if visit.note %} <span class="glyphicon glyphicon-file"></span> {% endif %}</a>
                             {% else %}
                                 {{visit.client.get_duration_display }}
                             {% endif %}
