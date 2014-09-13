@@ -76,10 +76,4 @@ def generateAllVisits(request):
             messages.info(request, msg)
     return render(request, "base/index.html", {})
 
-
-################################################################################
-@login_required
-def displayDay(request, year=None, month=None, day=None):
-    pass
-
 # EOF

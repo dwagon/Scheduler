@@ -16,6 +16,7 @@ urlpatterns = patterns(
     url(r'^client/', include('client.urls')),
     url(r'^gap/', include('gap.urls')),
     url(r'^visit/', include('visit.urls')),
+    url(r'^report/', include('report.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$',  login, {'template_name': 'base/login.html'}, name='login'),

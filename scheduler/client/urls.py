@@ -3,8 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import ClientDetail, ClientUpdate, ClientList, ClientDelete
 from .views import ClientNew, clientGenerateVisits, clientDeleteVisits
-from .views import displayMonth, displayDay, displayClientMonth, clientIndex
-from .views import deleteAllClients
+from .views import deleteAllClients, clientIndex
 import restviews
 
 api_patterns = [
@@ -28,12 +27,6 @@ urlpatterns = patterns(
     url(r'^(?P<pk>\d+)/clientGenerateVisits$', clientGenerateVisits, name='clientGenerateVisits'),
     url(r'^(?P<pk>\d+)/clientDeleteVisits$', clientDeleteVisits, name='clientDeleteVisits'),
     url(r"^deleteAllClients$", deleteAllClients, name='deleteAllClients'),
-    url(r"^month/(\d+)/(\d+)/(prev|next)/$", displayMonth, name='displayYearMonthPage'),
-    url(r"^month/(\d+)/(\d+)/$", displayMonth, name='displayYearMonth'),
-    url(r"^month/(\d+)/$", displayMonth),
-    url(r"^month/(?P<client>\d+)/$", displayClientMonth, name='displayClientMonth'),
-    url(r"^month$", displayMonth, name='displayThisMonth'),
-    url(r"^day/(\d+)/(\d+)/(\d+)/$", displayDay, name='displayDay'),
     url(r'^api/', include(api_patterns)),
     )
 

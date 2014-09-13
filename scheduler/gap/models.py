@@ -1,5 +1,7 @@
 from django.db import models
 
+gaps = None
+
 
 ################################################################################
 ################################################################################
@@ -26,7 +28,9 @@ class Gap(models.Model):
 
 ################################################################################
 def inGap(dt):
-    gaps = Gap.objects.all()
+    global gaps
+    if not gaps:
+        gaps = Gap.objects.all()
     for gp in gaps:
         if gp.inGap(dt):
             return gp

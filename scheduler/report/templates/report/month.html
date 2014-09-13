@@ -1,0 +1,69 @@
+<div class="table-responsive">
+<table border="1" width="90%" class="table">
+<tr>
+    <td>
+        {% if yearmode != True %}
+            <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'prev' %}">&lt;&lt; Prev</a>
+        {% endif %}
+    </td>
+    <td colspan="5" align="center">
+        <strong>{{ mname }} {{ year }} {{client}}</strong>
+    </td>
+    <td>
+        {% if yearmode != True %}
+            <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'next' %}">Next &gt;&gt;</a>
+        {% endif %}
+    </td>
+</tr>
+<tr>
+<td class="empty">&nbsp;Monday&nbsp;</td>
+<td class="empty">&nbsp;Tuesday&nbsp;</td>
+<td class="empty">&nbsp;Wednesday&nbsp;</td>
+<td class="empty">&nbsp;Thursday&nbsp;</td>
+<td class="empty">&nbsp;Friday&nbsp;</td>
+<td class="empty">&nbsp;Saturday&nbsp;</td>
+<td class="empty">&nbsp;Sunday&nbsp;</td>
+</tr>
+
+{% for week in month_days %}
+    <tr>
+    {% for day in week %}
+        <!-- TD style: empty | day | current; onClick handler and highlight -->
+        <td>
+        <!-- Day number and entry snippets -->
+        {% if day.real %}
+            <table class="table">
+                <tr style="vertical-align:top">
+                    {% if day.gap %}
+                        <td class="success"> {{day.day}} {{ day.gap.desc }}</td>
+                    {% else %}
+                        <td class="warning">{{ day.day }}</td>
+                    {% endif %}
+                </tr>
+                {% for visit in day.visits %}
+                    <tr height=90% style="vertical-align:bottom">
+                        <td class="info">
+                            <font color="{% if visit.good %}black{% else %}red{%endif%}">
+                            {% if yearmode != True %}
+                                <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
+                            {% else %}
+                                <b>{{ visit.client.name }}</b>:
+                            {% endif %}
+                            {% if yearmode != True %}
+                                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }}</a>
+                            {% else %}
+                                {{visit.client.get_duration_display }}
+                            {% endif %}
+                            </font>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+
+</div>
