@@ -1,6 +1,7 @@
 import datetime
 
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
@@ -8,18 +9,19 @@ from django.contrib import messages
 
 from .models import Visit
 from .forms import VisitForm
+from scheduler.views import LoginRequiredMixin
 from client.models import Client
 
 mnames = "January February March April May June July August September October November December".split()
 
 
 ################################################################################
-class VisitList(generic.ListView):
+class VisitList(LoginRequiredMixin, generic.ListView):
     model = Visit
 
 
 ################################################################################
-class VisitDetail(generic.DetailView):
+class VisitDetail(LoginRequiredMixin, generic.DetailView):
     model = Visit
 
     def get_context_data(self, *args, **kwargs):
@@ -31,7 +33,7 @@ class VisitDetail(generic.DetailView):
 
 
 ################################################################################
-class VisitUpdate(UpdateView):
+class VisitUpdate(LoginRequiredMixin, UpdateView):
     model = Visit
     form_class = VisitForm
 
@@ -40,7 +42,7 @@ class VisitUpdate(UpdateView):
 
 
 ################################################################################
-class VisitDelete(DeleteView):
+class VisitDelete(LoginRequiredMixin, DeleteView):
     model = Visit
 
     def get_success_url(self):
@@ -48,12 +50,13 @@ class VisitDelete(DeleteView):
 
 
 ################################################################################
-class VisitNew(CreateView):
+class VisitNew(LoginRequiredMixin, CreateView):
     model = Visit
     success_url = reverse_lazy('visitDetail')
 
 
 ################################################################################
+@login_required
 def clearAllVisits(request):
     from .models import clearVisits
     clearVisits()
@@ -61,6 +64,7 @@ def clearAllVisits(request):
 
 
 ################################################################################
+@login_required
 def generateAllVisits(request):
     # Make this a form to get the start and end days
     from .models import makeVisits
@@ -71,10 +75,5 @@ def generateAllVisits(request):
         for msg in msgs:
             messages.info(request, msg)
     return render(request, "base/index.html", {})
-
-
-################################################################################
-def displayDay(request, year=None, month=None, day=None):
-    pass
 
 # EOF

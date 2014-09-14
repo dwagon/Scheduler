@@ -1,36 +1,16 @@
 {% extends "base/base.html" %}
 {% block subbuttonbar %}
+<div class="row">
     <div class="col-md-1">
-        <a href="{% url 'clientIndex' %}"><button type="button" class="btn btn-info btn-sm btn-block">Clients</button></a>
+        <a href="{% url 'clientIndex' %}"><button type="button" class="btn btn-info btn-sm">Clients</button></a>
     </div>
     <div class="col-md-1">
-        <a href="{% url 'clientNew' %}"><button type="button" class="btn btn-primary btn-sm btn-block">New</button></a>
+        <a href="{% url 'clientNew' %}"><button type="button" class="btn btn-primary btn-sm">New</button></a>
     </div>
     <div class="col-md-1">
-        <a href="{% url 'clientList' %}"><button type="button" class="btn btn-primary btn-sm btn-block">Existing</button></a>
+        <a href="{% url 'clientList' %}"><button type="button" class="btn btn-primary btn-sm">Existing</button></a>
     </div>
-    <div class="col-md-1">
-        {% if client %}
-            <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm btn-block">Update</a>
-        {% endif %}
-    </div>
-    <div class="col-md-1">
-        {% if client %}
-            <a href="{%url 'clientGenerateVisits' client.id %}" type="button" class="btn btn-primary btn-sm btn-block">Make Visits</a>
-        {% endif %}
-    </div>
-    <div class="col-md-1">
-        {% if client %}
-            <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-warning btn-sm btn-block">Delete</a>
-        {% endif %}
-    </div>
-    {% if visits %}
-        <div class="col-md-1">
-            {% if client %}
-                <a href="{%url 'clientDeleteVisits' client.id %}" type="button" class="btn btn-warning btn-sm btn-block">Nuke visits</a>
-            {% endif %}
-        </div>
-    {% endif %}
+</div>
 {% endblock %}
 
 {% block content %}

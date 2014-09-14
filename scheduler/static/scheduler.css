@@ -1,0 +1,6 @@
+@media print {
+    a[href]:after {
+        content: none !important;
+    }
+    .page-break { display: block; page-break-before: always; }
+}

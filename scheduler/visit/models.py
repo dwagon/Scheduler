@@ -50,10 +50,10 @@ def isWeekend(d):
 ################################################################################
 def canFit(dt, dur):
     visits = Visit.objects.filter(date=dt)
-    capacity = 8
+    capacity = 8    # Hours in the day
     for v in visits:
         capacity -= v.client.duration
-        capacity -= 1   # Allow for travel
+        # capacity -= 1   # Allow for travel
     return capacity >= dur
 
 
@@ -67,8 +67,6 @@ def makeVisits(client, startDate, endDate):
     firstVisit = True
     while d < endDate:
         d += datetime.timedelta(days=1)
-        if not tryDay(client, d):
-            continue
         if not client.goodDay(d):
             continue
         daysSince = d - lastdate
@@ -76,6 +74,10 @@ def makeVisits(client, startDate, endDate):
             continue
         if canFit(d, client.duration):
             v = newVisit(client, d)
+            if inGap(d):
+                v.good = False
+                v.note = "Originally on %s" % d
+                v.save()
             if firstVisit:
                 firstVisit = False
             elif daysSince > clientRegularity and not client.flexible:
@@ -104,15 +106,6 @@ def createFlexibleVisit(client, d):
                 v = newVisit(client, newdate)
                 return v
     return None
-
-
-################################################################################
-def tryDay(client, d):
-    if inGap(d):
-        return False
-    if isWeekend(d):
-        return False
-    return True
 
 
 ################################################################################

@@ -1,27 +1,26 @@
 import datetime
-import calendar
 
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
 from .models import Client
-from gap.models import inGap
 from visit.models import Visit, makeVisits
+from scheduler.views import LoginRequiredMixin
 from .forms import ClientForm
-
-mnames = "January February March April May June July August September October November December".split()
+from report.reports import monthDetail
 
 
 ################################################################################
-class ClientList(generic.ListView):
+class ClientList(LoginRequiredMixin, generic.ListView):
     model = Client
 
 
 ################################################################################
-class ClientDetail(generic.DetailView):
+class ClientDetail(LoginRequiredMixin, generic.DetailView):
     model = Client
 
     def get_context_data(self, *args, **kwargs):
@@ -38,7 +37,7 @@ class ClientDetail(generic.DetailView):
 
 
 ################################################################################
-class ClientUpdate(UpdateView):
+class ClientUpdate(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
 
@@ -47,13 +46,13 @@ class ClientUpdate(UpdateView):
 
 
 ################################################################################
-class ClientDelete(DeleteView):
+class ClientDelete(LoginRequiredMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('clientList')
 
 
 ################################################################################
-class ClientNew(CreateView):
+class ClientNew(LoginRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
 
@@ -62,6 +61,7 @@ class ClientNew(CreateView):
 
 
 ################################################################################
+@login_required
 def clientDeleteVisits(requst, pk):
     """ Delete all the visits for a client """
     c = Client.objects.get(pk=pk)
@@ -71,6 +71,7 @@ def clientDeleteVisits(requst, pk):
 
 
 ################################################################################
+@login_required
 def clientGenerateVisits(request, pk):
     c = Client.objects.get(pk=pk)
     if c.startdate:
@@ -88,72 +89,25 @@ def clientGenerateVisits(request, pk):
 
 
 ################################################################################
+@login_required
 def displayDay(request, year=None, month=None, day=None):
     return redirect("displayThisMonth")
 
 
 ################################################################################
+@login_required
 def clientIndex(request):
-    return render_to_response('client/client_index.html', {})
+    return render(request, 'client/client_index.html')
 
 
 ################################################################################
-def displayClientMonth(request, client, year=None, month=None):
-    return displayMonth(request, year=year, month=month, client=client, template='client/month.html')
+@login_required
+def deleteAllClients(request):
+    for c in Client.objects.all():
+        for v in Visit.objects.filter(client=c):
+            v.delete()
+        c.delete()
+    return redirect("index")
 
-
-################################################################################
-def monthDetail(year=None, month=None, change=None, client=None):
-    today = datetime.date.today()
-    if year is None:
-        year = today.year
-    else:
-        year = int(year)
-    if month is None:
-        month = today.month
-    else:
-        month = int(month)
-
-    # apply next / previous change
-    if change in ("next", "prev"):
-        now, mdelta = datetime.date(year, month, 15), datetime.timedelta(days=31)
-        if change == "next":
-            mod = mdelta
-        elif change == "prev":
-            mod = -mdelta
-        year, month = (now+mod).timetuple()[:2]
-
-    cal = calendar.Calendar()
-    lst = [[]]
-    week = 0
-
-    # make month lists containing list of days for each week
-    # each day tuple will contain list of visits and 'current' indicator
-    for day in cal.itermonthdays(year, month):
-        current = False
-        visits = None
-        gap = None
-        dt = None
-        if day:
-            dt = datetime.date(year, month, day)
-            if dt == today:
-                current = True
-            gap = inGap(dt)
-            visits = Visit.objects.filter(date=dt)
-            if client:
-                visits = visits.filter(client=client)
-
-        lst[week].append((day, visits, current, gap, dt))
-        if len(lst[week]) == 7:
-            lst.append([])
-            week += 1
-    return {'year': year, 'month': month, 'month_days': lst, 'mname': mnames[month-1]}
-
-
-################################################################################
-def displayMonth(request, year=None, month=None, change=None, client=None, template='client/display_month.html'):
-    """Listing of days in `month`."""
-    d = monthDetail(year, month, change, client)
-    return render_to_response(template, d)
 
 # EOF

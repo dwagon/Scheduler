@@ -10,6 +10,7 @@ basedir = '/opt/scheduler'
 rundir = os.path.join(basedir, 'run')
 logdir = os.path.join(basedir, 'logs')
 bindir = os.path.join(basedir, 'bin')
+staticdir = os.path.join(basedir, 'static')
 user = 'scheduler'
 
 
@@ -87,6 +88,7 @@ def install_virtualenv():
 def warmup():
     with cd(basedir):
         sudo("%s/python ./scheduler/manage.py migrate" % bindir, user=user)
+        sudo("%s/python ./scheduler/manage.py collectstatic --noinput" % bindir)
 
 
 @task

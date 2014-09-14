@@ -9,6 +9,13 @@ Features:
 CHANGELOG
 =========
 
+Release 0.4
+-----------
+* Print version of calendar 
+* Redid calendary system into report system
+* Added year calendar
+* Export of client data
+
 Release 0.3
 -----------
 * Implemented start and end dates for client visits

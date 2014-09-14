@@ -21,5 +21,19 @@ Every {{client.regularity}} weeks
 {% if client.note %}
     Notes: {{client.note}}<br>
 {% endif %}
+<div class="row">
+    <div class="col-md-3">
+        <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
+    </div>
+    <div class="col-md-3">
+        <a href="{%url 'clientGenerateVisits' client.id %}" type="button" class="btn btn-primary btn-sm">Make Visits</a>
+    </div>
+    <div class="col-md-3">
+        <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-warning btn-sm">Delete</a>
+    </div>
+    <div class="col-md-3">
+        <a href="{%url 'clientDeleteVisits' client.id %}" type="button" class="btn btn-warning btn-sm">Nuke visits</a>
+    </div>
+</div>
 </div>
 </div>
