@@ -1,18 +1,8 @@
 {% extends "client/client_base.html" %}
 {% block client_content %}
-<form method="post" role="form" class="form-horizontal"> {% csrf_token %}
-{% for field in form %}
-    <div class="form-group">
-        {{field.errors}}
-        <label class="col-sm-2 control-label">{{field.label_tag}}</label>
-        <div class="col-sm-4">
-            {{field}}
-        </div>
-        <span class="help-block">{{field.help_text}}</span>
-    </div>
-{% endfor %}
-<div class="col-sm-offset-2 col-sm-4">
-<input type="submit" value="Save" class="btn btn-primary">
-</div>
-</form>
+
+{% include "base/datepicker.html" %}
+
+{% include "base/baseform.html" %}
+
 {% endblock %}

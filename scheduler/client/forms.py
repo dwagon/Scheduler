@@ -1,6 +1,5 @@
 # forms.py
 from django import forms
-
 from .models import Client
 
 
@@ -23,7 +22,7 @@ class ClientForm(forms.ModelForm):
         self.fields['dayofweek'].widget.attrs.update({'class': 'form-control'})
         self.fields['duration'].widget.attrs.update({'class': 'form-control'})
         self.fields['flexible'].widget.attrs.update({'class': 'form-control'})
-        self.fields['startdate'].widget.attrs.update({'class': 'form-control'})
-        self.fields['enddate'].widget.attrs.update({'class': 'form-control', 'type': 'date'})
+        self.fields['startdate'].widget.attrs.update({'class': 'datepicker'})
+        self.fields['enddate'].widget.attrs.update({'class': 'datepicker'})
 
 # EOF
