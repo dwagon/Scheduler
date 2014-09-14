@@ -23,16 +23,17 @@ Every {{client.regularity}} weeks
 {% endif %}
 <div class="row">
     <div class="col-md-3">
-        <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
+        <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm">Edit</a>
     </div>
     <div class="col-md-3">
         <a href="{%url 'clientGenerateVisits' client.id %}" type="button" class="btn btn-primary btn-sm">Make Visits</a>
     </div>
     <div class="col-md-3">
-        <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-warning btn-sm">Delete</a>
-    </div>
-    <div class="col-md-3">
         <a href="{%url 'clientDeleteVisits' client.id %}" type="button" class="btn btn-warning btn-sm">Nuke visits</a>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-2">
+        <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-danger btn-sm">Delete</a>
     </div>
 </div>
 </div>
