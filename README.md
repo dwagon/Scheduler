@@ -3,11 +3,14 @@ Scheduler
 
 System to allow scheduling of multiple clients
 
-Features:
-* Gaps - times when you don't want any client visits scheduled. E.g. holidays.
-
 CHANGELOG
 =========
+
+Release 0.5
+-----------
+* Added customer reports
+* Fixed customer view
+* Lots of UX reworking
 
 Release 0.4
 -----------
