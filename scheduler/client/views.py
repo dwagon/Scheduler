@@ -24,7 +24,7 @@ class ClientDetail(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(ClientDetail, self).get_context_data(*args, **kwargs)
         client = kwargs['object']
-        d = monthDetail(client=client)
+        d = monthDetail()
         context['visits'] = Visit.objects.filter(client=client)
         context['year'] = d['year']
         context['month'] = d['month']

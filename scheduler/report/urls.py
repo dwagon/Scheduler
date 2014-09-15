@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from .reports import reportIndex, displayMonth, displayClientMonth, displayYear
+from .reports import reportIndex, displayMonth, displayYear
 from .reports import displayDay, exportData
 
 urlpatterns = patterns(
@@ -8,7 +8,6 @@ urlpatterns = patterns(
     url(r"^month/(\d+)/(\d+)/(prev|next)/$", displayMonth, name='displayYearMonthPage'),
     url(r"^month/(\d+)/(\d+)/$", displayMonth, name='displayYearMonth'),
     url(r"^month/(\d+)/$", displayMonth),
-    url(r"^month/(?P<client>\d+)/$", displayClientMonth, name='displayClientMonth'),
     url(r"^month$", displayMonth, name='displayThisMonth'),
     url(r"^year/$", displayYear, name='displayYear'),
     url(r"^year/(\d+)$", displayYear, name='displayYear'),

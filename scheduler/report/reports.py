@@ -21,13 +21,7 @@ def reportIndex(request):
 
 
 ################################################################################
-@login_required
-def displayClientMonth(request, client, year=None, month=None):
-    return displayMonth(request, year=year, month=month, client=client, template='report/month.html')
-
-
-################################################################################
-def monthDetail(year=None, month=None, change=None, client=None):
+def monthDetail(year=None, month=None, change=None):
     today = datetime.date.today()
     if year is None:
         year = today.year
@@ -55,7 +49,7 @@ def monthDetail(year=None, month=None, change=None, client=None):
     # each day tuple will contain list of visits and 'current' indicator
     for day in cal.itermonthdays(year, month):
         if day:
-            dd = dayDetails(year, month, day, client)
+            dd = dayDetails(year, month, day)
             lst[week].append(dd)
         else:
             lst[week].append({'real': False})
@@ -66,15 +60,10 @@ def monthDetail(year=None, month=None, change=None, client=None):
 
 
 ################################################################################
-def dayDetails(year, month, day, client=None):
-    if client:
-        allvisits = Visit.objects.filter(client=client)
-    else:
-        allvisits = Visit.objects.all()
-
+def dayDetails(year, month, day):
     dt = datetime.date(year, month, day)
     gap = inGap(dt)
-    visits = allvisits.filter(date=dt)
+    visits = Visit.objects.filter(date=dt)
     today = (dt == datetime.date.today())
     return {
         'date': dt,
@@ -90,9 +79,9 @@ def dayDetails(year, month, day, client=None):
 
 ################################################################################
 @login_required
-def displayMonth(request, year=None, month=None, change=None, client=None, template='report/display_month.html'):
+def displayMonth(request, year=None, month=None, change=None, template='report/display_month.html'):
     """Listing of days in `month`."""
-    d = monthDetail(year, month, change, client)
+    d = monthDetail(year, month, change)
     return render(request, template, d)
 
 
