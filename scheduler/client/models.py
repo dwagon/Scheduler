@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 DOW_CHOICES = (
     (0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'),
@@ -36,5 +37,20 @@ class Client(models.Model):
         if d.weekday() == self.dayofweek:
             return True
         return False
+
+    ############################################################################
+    def makeVisits(self, startdate=None, enddate=None):
+        from visit.models import makeVisits
+        today = datetime.datetime.now()
+        if self.startdate:
+            start = self.startdate
+        else:
+            start = datetime.date(today.year, 1, 1)
+        if self.enddate:
+            end = self.enddate
+        else:
+            end = datetime.date(today.year, 12, 31)
+        msgs = makeVisits(self, start, end)
+        return msgs
 
 # EOF

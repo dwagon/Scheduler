@@ -1,5 +1,3 @@
-import datetime
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import generic
@@ -67,11 +65,8 @@ def clearAllVisits(request):
 @login_required
 def generateAllVisits(request):
     # Make this a form to get the start and end days
-    from .models import makeVisits
-    start = datetime.date(2014, 1, 1)
-    end = datetime.date(2015, 12, 31)
     for c in Client.objects.all().order_by('-duration'):
-        msgs = makeVisits(c, start, end)
+        msgs = c.makeVisits()
         for msg in msgs:
             messages.info(request, msg)
     return render(request, "base/index.html", {})
