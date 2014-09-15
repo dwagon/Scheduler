@@ -2,17 +2,23 @@
 {% block client_content %}
     <div class="row">
         <div class="col-md-5">
-            {% include "client/client_view.html" %}
+            <div class="row">
+                <div class="col-md-12">
+                    {% include "client/client_view.html" %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="list-group">
+                        {% for visit in visits %}
+                            {% include "visit/visit_view.html" %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-5">
             {% include 'report/month.html' %}
         </div>
     </div>
-    {% for visit in visits %}
-        <div class="row">
-            <div class="col-md-5">
-                {% include "visit/visit_view.html" %}
-            </div>
-        </div>
-    {% endfor %}
 {% endblock %}
