@@ -19,7 +19,7 @@ class Client(models.Model):
     dayofweek = models.SmallIntegerField(choices=DOW_CHOICES)
     duration = models.SmallIntegerField(choices=DUR_CHOICES)
     note = models.CharField(max_length=250, blank=True)
-    flexible = models.BooleanField(default=False, help_text="Try adjacent days to fit in visit")
+    flexible = models.BooleanField(default=False)   # Legacy
     startdate = models.DateField(null=True, default=None, help_text="Schedule visits from this date (YYYY-MM-DD)")
     enddate = models.DateField(null=True, default=None, help_text="Schedule visits until this date (YYYY-MM-DD)")
 
