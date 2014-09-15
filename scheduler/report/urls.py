@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from .reports import reportIndex, displayMonth, displayClientMonth, displayYear
-from .reports import displayDay
+from .reports import displayDay, exportData
 
 urlpatterns = patterns(
     '',
@@ -13,6 +13,7 @@ urlpatterns = patterns(
     url(r"^year/$", displayYear, name='displayYear'),
     url(r"^year/(\d+)$", displayYear, name='displayYear'),
     url(r"^day/(\d+)/(\d+)/(\d+)/$", displayDay, name='displayDay'),
+    url(r'^exportData$', exportData, name='exportData'),
     )
 
 # EOF

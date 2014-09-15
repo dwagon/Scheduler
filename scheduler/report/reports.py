@@ -2,10 +2,12 @@ import datetime
 import calendar
 
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from gap.models import inGap
 from visit.models import Visit
+from client.models import Client
 
 mnames = "January February March April May June July August September October November December".split()
 
@@ -113,5 +115,21 @@ def displayYear(request, year=None):
 def displayDay(request, year=None, month=None, day=None):
     # TODO
     pass
+
+
+################################################################################
+@login_required
+def exportData(request):
+    import csv
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="schedule.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Client', 'Visit', 'Notes'])
+
+    for client in Client.objects.all():
+        writer.writerow([client.name, None, client.note])
+        for visit in Visit.objects.filter(client=client):
+            writer.writerow(['', visit.date, visit.note])
+    return response
 
 # EOF
