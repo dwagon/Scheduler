@@ -5,7 +5,6 @@ from .reports import displayDay, exportData, clientReport
 urlpatterns = patterns(
     '',
     url(r'^$', reportIndex, name='reportIndex'),
-    url(r"^month/(\d+)/(\d+)/(prev|next)/$", displayMonth, name='displayYearMonthPage'),
     url(r"^month/(\d+)/(\d+)/$", displayMonth, name='displayYearMonth'),
     url(r"^month/(\d+)/$", displayMonth),
     url(r"^month$", displayMonth, name='displayThisMonth'),

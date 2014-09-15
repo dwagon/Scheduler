@@ -3,7 +3,9 @@
 <tr>
     <td>
         {% if yearmode != True %}
-            <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'prev' %}">&lt;&lt; Prev</a>
+            {% if prev %}
+                <a class="hidden-print" href="{{prev}}">&lt;&lt; Prev</a>
+            {% endif %}
         {% endif %}
     </td>
     <td colspan="5" align="center">
@@ -11,7 +13,9 @@
     </td>
     <td>
         {% if yearmode != True %}
-            <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'next' %}">Next &gt;&gt;</a>
+            {% if next %}
+                <a class="hidden-print" href="{{next}}">Next &gt;&gt;</a>
+            {% endif %}
         {% endif %}
     </td>
 </tr>
@@ -28,9 +32,7 @@
 {% for week in month_days %}
     <tr>
     {% for day in week %}
-        <!-- TD style: empty | day | current; onClick handler and highlight -->
         <td>
-        <!-- Day number and entry snippets -->
         {% if day.real %}
             <table class="table">
                 <tr style="vertical-align:top">

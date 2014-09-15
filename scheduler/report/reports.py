@@ -3,11 +3,13 @@ import calendar
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
 from gap.models import inGap
 from visit.models import Visit
 from client.models import Client
+from scheduler.utils import nextMonth, prevMonth, thisMonth
 
 mnames = "January February March April May June July August September October November December".split()
 
@@ -21,26 +23,8 @@ def reportIndex(request):
 
 
 ################################################################################
-def monthDetail(year=None, month=None, change=None):
-    today = datetime.date.today()
-    if year is None:
-        year = today.year
-    else:
-        year = int(year)
-    if month is None:
-        month = today.month
-    else:
-        month = int(month)
-
-    # apply next / previous change
-    if change in ("next", "prev"):
-        now, mdelta = datetime.date(year, month, 15), datetime.timedelta(days=31)
-        if change == "next":
-            mod = mdelta
-        elif change == "prev":
-            mod = -mdelta
-        year, month = (now+mod).timetuple()[:2]
-
+def monthDetail(year=None, month=None):
+    year, month = thisMonth(year, month)
     cal = calendar.Calendar()
     lst = [[]]
     week = 0
@@ -79,10 +63,15 @@ def dayDetails(year, month, day):
 
 ################################################################################
 @login_required
-def displayMonth(request, year=None, month=None, change=None, template='report/display_month.html'):
+def displayMonth(request, year=None, month=None):
     """Listing of days in `month`."""
-    d = monthDetail(year, month, change)
-    return render(request, template, d)
+    year, month = thisMonth(year, month)
+    d = monthDetail(year, month)
+    ny, nm = nextMonth(year, month)
+    py, pm = prevMonth(year, month)
+    d['next'] = reverse('displayYearMonth', args=(ny, nm))
+    d['prev'] = reverse('displayYearMonth', args=(py, pm))
+    return render(request, 'report/display_month.html', d)
 
 
 ################################################################################
