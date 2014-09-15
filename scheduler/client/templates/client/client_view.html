@@ -1,22 +1,14 @@
 <div class="panel panel-info">
     <div class="panel-heading">{{client.name}}</div>
     <div class="panel-body">
-Every {{client.regularity}} weeks
+    Every {{client.regularity}} weeks
     {{client.get_dayofweek_display}} 
     for {{client.get_duration_display}} 
     <br>
-{% if client.startdate or client.enddate %}
-        Date Range: 
-        {% if client.startdate %}
-            {{client.startdate}} - 
-        {% endif %}
-        {% if client.enddate %}
-            {{client.enddate}} 
-        {% else %}
-            Onwards
-        {% endif %}
-        <br>
-{% endif %}
+    {% if client.startdate or client.enddate %}
+        Date Range: {{client.daterange}}
+    <br>
+    {% endif %}
 {% if client.note %}
     Notes: {{client.note}}<br>
 {% endif %}

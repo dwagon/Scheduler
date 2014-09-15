@@ -27,6 +27,19 @@ class Client(models.Model):
         ordering = ['name']
 
     ############################################################################
+    def daterange(self):
+        if not self.startdate and not self.enddate:
+            return ""
+        outstr = ""
+        if self.startdate:
+            outstr += "%s -" % self.startdate
+        if self.enddate:
+            outstr += " %s" % self.enddate
+        else:
+            outstr += " onwards"
+        return outstr
+
+    ############################################################################
     def __str__(self):
         return "%s" % self.name
 

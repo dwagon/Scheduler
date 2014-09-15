@@ -1,0 +1,18 @@
+{% extends "report/base.html" %}
+{% block report_content %}
+<div class="table-responsive">
+<table class="table table-striped"">
+    <tr><th>Client</th> <th>Regularity</th> <th>Day of Week</th> <th>Duration</th> <th>Dates</th> <th>Notes</th></tr>
+    {% for client in clients %}
+        <tr>
+        <td>{{client.name}}</td>
+        <td>{{client.regularity}}</td>
+        <td>{{client.get_dayofweek_display}}</td>
+        <td>{{client.get_duration_display}}</td>
+        <td>{{client.daterange}}</td>
+        <td>{{client.note}}</td>
+        </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}
