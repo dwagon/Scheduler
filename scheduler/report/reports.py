@@ -121,4 +121,12 @@ def exportData(request):
             writer.writerow(['', visit.date, visit.note])
     return response
 
+
+################################################################################
+@login_required
+def clientReport(request):
+    d = {}
+    d['clients'] = Client.objects.all()
+    return render(request, "report/customer_report.html", d)
+
 # EOF
