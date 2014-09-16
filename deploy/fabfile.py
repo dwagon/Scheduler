@@ -61,7 +61,10 @@ def install_nginx():
     install_pkg('nginx')
     avail = '/etc/nginx/sites-available'
     enabled = '/etc/nginx/sites-enabled'
-    put('configs/nginx.conf', '%s/scheduler.conf' % avail, use_sudo=True)
+    if not exists('%s/scheduler.conf' % avail):
+        put('configs/nginx.conf', '%s/scheduler.conf' % avail, use_sudo=True)
+    else:
+        put('configs/nginx.conf', '%s/scheduler.conf.dist' % avail, use_sudo=True)
     if not exists('%s/scheduler.conf' % enabled):
         sudo('/bin/ln -s %s/scheduler.conf %s/scheduler.conf' % (avail, enabled))
 
