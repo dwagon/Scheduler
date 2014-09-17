@@ -5,7 +5,7 @@
     <tr><th>Client</th> <th>Regularity</th> <th>Day of Week</th> <th>Duration</th> <th>Dates</th> <th>Notes</th></tr>
     {% for client in clients %}
         <tr>
-        <td>{{client.name}}</td>
+        <td><a href="{% url 'clientDetail' client.id %}">{{client.name}}</a></td>
         <td>{{client.regularity}}</td>
         <td>{{client.get_dayofweek_display}}</td>
         <td>{{client.get_duration_display}}</td>
