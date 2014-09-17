@@ -79,7 +79,7 @@ def makeVisits(client, startDate, endDate):
             v = newVisit(client, d)
             if inGap(d):
                 v.good = False
-                v.note = "Originally on %s" % d
+                v.note = "Originally on %s (%s)" % (d, inGap(d))
                 v.save()
             if firstVisit:
                 firstVisit = False
