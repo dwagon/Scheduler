@@ -67,6 +67,9 @@ def makeVisits(client, startDate, endDate):
     firstVisit = True
     while d < endDate:
         d += datetime.timedelta(days=1)
+        # Skip weekends
+        if d.isoweekday() in (6, 7):
+            continue
         if not client.goodDay(d):
             continue
         daysSince = d - lastdate
