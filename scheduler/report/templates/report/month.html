@@ -2,20 +2,16 @@
 <table border="1" width="90%" class="table">
 <tr>
     <td>
-        {% if yearmode != True %}
-            {% if prev %}
-                <a class="hidden-print" href="{{prev}}">&lt;&lt; Prev</a>
-            {% endif %}
+        {% if prev %}
+            <a class="hidden-print" href="{{prev}}">&lt;&lt; Prev</a>
         {% endif %}
     </td>
     <td colspan="5" align="center">
         <strong>{{ mname }} {{ year }}</strong>
     </td>
     <td>
-        {% if yearmode != True %}
-            {% if next %}
-                <a class="hidden-print" href="{{next}}">Next &gt;&gt;</a>
-            {% endif %}
+        {% if next %}
+            <a class="hidden-print" href="{{next}}">Next &gt;&gt;</a>
         {% endif %}
     </td>
 </tr>

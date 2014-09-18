@@ -85,6 +85,8 @@ def displayYear(request, year=None):
     d = {}
     for month in range(1, 13):
         d["m%s" % month] = monthDetail(year, month)
+    d['prev'] = reverse('displayYear', args=(year-1,))
+    d['next'] = reverse('displayYear', args=(year+1,))
     return render(request, "report/display_year.html", d)
 
 
