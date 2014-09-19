@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.views import login, logout
 from django.conf import settings
+from django.views.generic import RedirectView
 
 from .views import index
 
@@ -10,6 +11,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
     url(r'^$', index, name='index'),
     url(r'^client/', include('client.urls')),
     url(r'^gap/', include('gap.urls')),
