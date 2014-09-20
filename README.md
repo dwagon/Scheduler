@@ -11,6 +11,7 @@ Release 0.5
 * Added customer reports
 * Fixed customer view
 * Lots of UX reworking
+* Reworking of the API
 
 Release 0.4
 -----------
