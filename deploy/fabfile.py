@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 from fabric.api import task, env, sudo, runs_once, settings, hide, put
-from fabric.api import cd, run
+from fabric.api import cd, run, get
 from fabric.contrib.files import exists
 import os
+import time
 
 env.use_ssh_config = True
 
@@ -14,6 +15,17 @@ staticdir = os.path.join(basedir, 'static')
 user = 'scheduler'
 
 
+###############################################################################
+@task
+def dbdump():
+    """ Backup database """
+    timestamp = time.strftime('%Y%m%d')
+    fname = '/tmp/pg_dump_%s.gz' % timestamp
+    sudo('pg_dump scheduler | gzip > %s' % fname, user='postgres')
+    get(fname)
+
+
+###############################################################################
 @runs_once
 def get_pkglist():
     pkgs = []
@@ -29,6 +41,7 @@ def get_pkglist():
     return pkgs
 
 
+###############################################################################
 def users():
     if not run('getent group webapps', warn_only=True):
         sudo('groupadd --system webapps')
@@ -36,6 +49,7 @@ def users():
         sudo('useradd --system --gid webapps --shell /bin/bash --home %s %s' % (basedir, user))
 
 
+###############################################################################
 def install_pkg(pkgname):
     installed = get_pkglist()
     if pkgname in installed:
@@ -44,6 +58,7 @@ def install_pkg(pkgname):
         sudo('/usr/bin/apt-get -y install %s' % pkgname)
 
 
+###############################################################################
 @task
 def install_postgres():
     install_pkg('postgresql-9.3')
@@ -56,6 +71,7 @@ def install_postgres():
         sudo('createdb scheduler', user='postgres')
 
 
+###############################################################################
 @task
 def install_nginx():
     install_pkg('nginx')
@@ -69,6 +85,7 @@ def install_nginx():
         sudo('/bin/ln -s %s/scheduler.conf %s/scheduler.conf' % (avail, enabled))
 
 
+###############################################################################
 @task
 def install_virtualenv():
     install_pkg('python-virtualenv')
@@ -87,6 +104,7 @@ def install_virtualenv():
             sudo('./bin/pip install -r ./requirements.txt')
 
 
+###############################################################################
 @task
 def warmup():
     with cd(basedir):
@@ -94,6 +112,7 @@ def warmup():
         sudo("%s/python ./scheduler/manage.py collectstatic --noinput" % bindir)
 
 
+###############################################################################
 @task
 def clone(branch):
     install_pkg('git')
@@ -105,17 +124,20 @@ def clone(branch):
         sudo('git checkout %s' % branch)
 
 
+###############################################################################
 @task
 def deploy(branch='master'):
     users()
     install_nginx()
     install_postgres()
+    dbdump()
     clone(branch)
     install_virtualenv()
     warmup()
     start()
 
 
+###############################################################################
 @task
 def start():
     with cd(basedir):
