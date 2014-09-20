@@ -17,8 +17,14 @@ urlpatterns = patterns(
     url(r'^gap/', include('gap.urls')),
     url(r'^visit/', include('visit.urls')),
     url(r'^report/', include('report.urls')),
+
+    url(r'^api/v1/gap/', include('gap.apiurls')),
+    url(r'^api/v1/client/', include('client.apiurls')),
+    url(r'^api/v1/visit/', include('visit.apiurls')),
+
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+
     url(r'^accounts/login/$',  login, {'template_name': 'base/login.html'}, name='login'),
     url(r'^accounts/logout/$', logout, {'next_page': '/'}, name='logout'),
 )

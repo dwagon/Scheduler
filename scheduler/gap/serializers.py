@@ -5,6 +5,6 @@ from rest_framework import serializers
 class GapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gap
-        fields = ('start', 'end')
+        fields = ('desc', 'start', 'end')
 
 # EOF
