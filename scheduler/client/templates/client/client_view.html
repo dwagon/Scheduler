@@ -1,38 +1,30 @@
-<div class="panel panel-primary">
+<div class="panel panel-info">
     <div class="panel-heading">{{client.name}}</div>
     <div class="panel-body">
-Every {{client.regularity}} weeks
+    Every {{client.regularity}} weeks
     {{client.get_dayofweek_display}} 
-    {% if client.flexible %} (Flexible) {% endif %}
     for {{client.get_duration_display}} 
     <br>
-{% if client.startdate or client.enddate %}
-        Date Range: 
-        {% if client.startdate %}
-            {{client.startdate}} - 
-        {% endif %}
-        {% if client.enddate %}
-            {{client.enddate}} 
-        {% else %}
-            Onwards
-        {% endif %}
-        <br>
-{% endif %}
+    {% if client.startdate or client.enddate %}
+        Date Range: {{client.daterange}}
+    <br>
+    {% endif %}
 {% if client.note %}
     Notes: {{client.note}}<br>
 {% endif %}
 <div class="row">
     <div class="col-md-3">
-        <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm">Update</a>
+        <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm">Edit</a>
     </div>
     <div class="col-md-3">
         <a href="{%url 'clientGenerateVisits' client.id %}" type="button" class="btn btn-primary btn-sm">Make Visits</a>
     </div>
     <div class="col-md-3">
-        <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-warning btn-sm">Delete</a>
-    </div>
-    <div class="col-md-3">
         <a href="{%url 'clientDeleteVisits' client.id %}" type="button" class="btn btn-warning btn-sm">Nuke visits</a>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-2">
+        <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-danger btn-sm">Delete</a>
     </div>
 </div>
 </div>

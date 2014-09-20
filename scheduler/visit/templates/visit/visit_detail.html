@@ -1,29 +1,39 @@
-{% extends "base/base.html" %}
-{% block content %}
+{% extends "client/client_base.html" %}
+{% block client_content %}
 
 <div class="row">
     <div class="col-md-5">
-        <a href="{% url 'clientDetail' visit.client.id %}">{{visit.client}}</a>
-        ({{visit.client.get_duration_display}})
-        Date: {{visit.date}}
-        {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit</font> {% endif %}
-    </div>
-</div>
-{% if visit.note %}
-    <div class="row">
-        <div class="col-md-5">
-            {{visit.note}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <a href="{% url 'clientDetail' visit.client.id %}">{{visit.client}}</a>
+                        ({{visit.client.get_duration_display}})
+                        Date: {{visit.date}}
+                    </div>
+                    <div class="panel-body">
+                        {% if visit.note %}
+                            <span class="glyphicon glyphicon-file"></span>
+                            {{visit.note}}
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="{%url 'visitUpdate' visit.id %}"> <button type="button" class="btn btn-primary btn-sm">Edit Visit</button></a>
+                        </div>
+                        <div class="col-md-6"> </div>
+                        <div class="col-md-2">
+                            <a href="{%url 'visitDelete' visit.id %}"> <button type="button" class="btn btn-warning btn-sm">Delete Visit</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-{% endif %}
-<div class="row">
-    <div class="col-md-2">
-        <a href="{%url 'visitUpdate' visit.id %}"> <button type="button" class="btn btn-primary btn-sm">Edit Visit</button></a>
-    </div>
-    <div class="col-md-2">
-        <a href="{%url 'visitDelete' visit.id %}"> <button type="button" class="btn
-    btn-warning btn-sm">Delete Visit</button></a>
+    <div class="col-md-5">
+        {% include 'report/month.html' with client=visit.client year=visit.date.year month=visit.date.month %}
     </div>
 </div>
+
 
 {% endblock %}

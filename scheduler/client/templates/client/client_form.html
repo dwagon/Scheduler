@@ -1,7 +1,8 @@
 {% extends "client/client_base.html" %}
 {% block client_content %}
-<form method="post"> {% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Create">
-</form>
+
+{% include "base/datepicker.html" %}
+
+{% include "base/baseform.html" %}
+
 {% endblock %}

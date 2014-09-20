@@ -1,5 +1,3 @@
-import datetime
-
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views import generic
@@ -8,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
 from .models import Client
-from visit.models import Visit, makeVisits
+from visit.models import Visit
 from scheduler.views import LoginRequiredMixin
 from .forms import ClientForm
 from report.reports import monthDetail
@@ -26,7 +24,7 @@ class ClientDetail(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(ClientDetail, self).get_context_data(*args, **kwargs)
         client = kwargs['object']
-        d = monthDetail(client=client)
+        d = monthDetail()
         context['visits'] = Visit.objects.filter(client=client)
         context['year'] = d['year']
         context['month'] = d['month']
@@ -74,15 +72,7 @@ def clientDeleteVisits(requst, pk):
 @login_required
 def clientGenerateVisits(request, pk):
     c = Client.objects.get(pk=pk)
-    if c.startdate:
-        start = c.startdate
-    else:
-        start = datetime.date(2014, 1, 1)
-    if c.enddate:
-        end = c.enddate
-    else:
-        end = datetime.date(2015, 12, 31)
-    msgs = makeVisits(c, start, end)
+    msgs = c.makeVisits()
     for msg in msgs:
         messages.info(request, msg)
     return redirect("clientDetail", pk=pk)

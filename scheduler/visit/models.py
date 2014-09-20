@@ -50,7 +50,7 @@ def isWeekend(d):
 ################################################################################
 def canFit(dt, dur):
     visits = Visit.objects.filter(date=dt)
-    capacity = 8    # Hours in the day
+    capacity = 9    # Hours in the day
     for v in visits:
         capacity -= v.client.duration
         # capacity -= 1   # Allow for travel
@@ -67,6 +67,9 @@ def makeVisits(client, startDate, endDate):
     firstVisit = True
     while d < endDate:
         d += datetime.timedelta(days=1)
+        # Skip weekends
+        if d.isoweekday() in (6, 7):
+            continue
         if not client.goodDay(d):
             continue
         daysSince = d - lastdate
@@ -76,36 +79,18 @@ def makeVisits(client, startDate, endDate):
             v = newVisit(client, d)
             if inGap(d):
                 v.good = False
-                v.note = "Originally on %s" % d
+                v.note = "Originally on %s (%s)" % (d, inGap(d))
                 v.save()
             if firstVisit:
                 firstVisit = False
-            elif daysSince > clientRegularity and not client.flexible:
+            elif daysSince > clientRegularity:
                 v.good = False
                 v.save()
                 msgs.append("Visit on %s - %s days since last (meant to be %s days)" % (d, daysSince.days, clientRegularity.days))
             lastdate = v.date
             continue
 
-        if client.flexible:
-            v = createFlexibleVisit(client, d)
-            if v:
-                lastdate = v.date
-
     return msgs
-
-
-################################################################################
-def createFlexibleVisit(client, d):
-    for delta in (1, 2):
-        for sign in (-1, 1):
-            newdate = d + datetime.timedelta(days=sign*delta)
-            if not tryDay(client, newdate):
-                continue
-            if canFit(newdate, client.duration):
-                v = newVisit(client, newdate)
-                return v
-    return None
 
 
 ################################################################################

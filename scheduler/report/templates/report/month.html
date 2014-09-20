@@ -2,16 +2,16 @@
 <table border="1" width="90%" class="table">
 <tr>
     <td>
-        {% if yearmode != True %}
-            <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'prev' %}">&lt;&lt; Prev</a>
+        {% if prev %}
+            <a class="hidden-print" href="{{prev}}">&lt;&lt; Prev</a>
         {% endif %}
     </td>
     <td colspan="5" align="center">
-        <strong>{{ mname }} {{ year }} {{client}}</strong>
+        <strong>{{ mname }} {{ year }}</strong>
     </td>
     <td>
-        {% if yearmode != True %}
-            <a class="hidden-print" href="{% url 'displayYearMonthPage' year month 'next' %}">Next &gt;&gt;</a>
+        {% if next %}
+            <a class="hidden-print" href="{{next}}">Next &gt;&gt;</a>
         {% endif %}
     </td>
 </tr>
@@ -28,9 +28,7 @@
 {% for week in month_days %}
     <tr>
     {% for day in week %}
-        <!-- TD style: empty | day | current; onClick handler and highlight -->
         <td>
-        <!-- Day number and entry snippets -->
         {% if day.real %}
             <table class="table">
                 <tr style="vertical-align:top">
@@ -42,23 +40,25 @@
                 </tr>
                 {% for visit in day.visits %}
                     <tr height=90% style="vertical-align:bottom">
-                        <td 
-                            {% if visit.good %}
-                            class="info"
-                                {% else %}
-                            class="danger"
+                        <td
+                            {% if client %}
+                                {% if visit.client == client %}
+                                    {% if visit.good %}
+                                        class="info"
+                                    {% else %}
+                                        class="danger"
+                                    {% endif %}
                                 {% endif %}
+                            {% else %}
+                                {% if visit.good %}
+                                    class="info"
+                                {% else %}
+                                    class="danger"
+                                {% endif %}
+                            {% endif %}
                         >
-                            {% if yearmode != True %}
-                                <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
-                            {% else %}
-                                <b>{{ visit.client.name }}</b>:
-                            {% endif %}
-                            {% if yearmode != True %}
-                                <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }} {% if visit.note %} <span class="glyphicon glyphicon-file"></span> {% endif %}</a>
-                            {% else %}
-                                {{visit.client.get_duration_display }}
-                            {% endif %}
+                            <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
+                            <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }} {% if visit.note %} <span class="glyphicon glyphicon-file"></span> {% endif %}</a>
                             </font>
                         </td>
                     </tr>

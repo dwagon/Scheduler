@@ -2,10 +2,14 @@ import datetime
 import calendar
 
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
 from gap.models import inGap
 from visit.models import Visit
+from client.models import Client
+from scheduler.utils import nextMonth, prevMonth, thisMonth
 
 mnames = "January February March April May June July August September October November December".split()
 
@@ -19,32 +23,8 @@ def reportIndex(request):
 
 
 ################################################################################
-@login_required
-def displayClientMonth(request, client, year=None, month=None):
-    return displayMonth(request, year=year, month=month, client=client, template='report/month.html')
-
-
-################################################################################
-def monthDetail(year=None, month=None, change=None, client=None):
-    today = datetime.date.today()
-    if year is None:
-        year = today.year
-    else:
-        year = int(year)
-    if month is None:
-        month = today.month
-    else:
-        month = int(month)
-
-    # apply next / previous change
-    if change in ("next", "prev"):
-        now, mdelta = datetime.date(year, month, 15), datetime.timedelta(days=31)
-        if change == "next":
-            mod = mdelta
-        elif change == "prev":
-            mod = -mdelta
-        year, month = (now+mod).timetuple()[:2]
-
+def monthDetail(year=None, month=None):
+    year, month = thisMonth(year, month)
     cal = calendar.Calendar()
     lst = [[]]
     week = 0
@@ -53,7 +33,7 @@ def monthDetail(year=None, month=None, change=None, client=None):
     # each day tuple will contain list of visits and 'current' indicator
     for day in cal.itermonthdays(year, month):
         if day:
-            dd = dayDetails(year, month, day, client)
+            dd = dayDetails(year, month, day)
             lst[week].append(dd)
         else:
             lst[week].append({'real': False})
@@ -64,15 +44,10 @@ def monthDetail(year=None, month=None, change=None, client=None):
 
 
 ################################################################################
-def dayDetails(year, month, day, client=None):
-    if client:
-        allvisits = Visit.objects.filter(client=client)
-    else:
-        allvisits = Visit.objects.all()
-
+def dayDetails(year, month, day):
     dt = datetime.date(year, month, day)
     gap = inGap(dt)
-    visits = allvisits.filter(date=dt)
+    visits = Visit.objects.filter(date=dt)
     today = (dt == datetime.date.today())
     return {
         'date': dt,
@@ -88,10 +63,15 @@ def dayDetails(year, month, day, client=None):
 
 ################################################################################
 @login_required
-def displayMonth(request, year=None, month=None, change=None, client=None, template='report/display_month.html'):
+def displayMonth(request, year=None, month=None):
     """Listing of days in `month`."""
-    d = monthDetail(year, month, change, client)
-    return render(request, template, d)
+    year, month = thisMonth(year, month)
+    d = monthDetail(year, month)
+    ny, nm = nextMonth(year, month)
+    py, pm = prevMonth(year, month)
+    d['next'] = reverse('displayYearMonth', args=(ny, nm))
+    d['prev'] = reverse('displayYearMonth', args=(py, pm))
+    return render(request, 'report/display_month.html', d)
 
 
 ################################################################################
@@ -105,6 +85,8 @@ def displayYear(request, year=None):
     d = {}
     for month in range(1, 13):
         d["m%s" % month] = monthDetail(year, month)
+    d['prev'] = reverse('displayYear', args=(year-1,))
+    d['next'] = reverse('displayYear', args=(year+1,))
     return render(request, "report/display_year.html", d)
 
 
@@ -113,5 +95,29 @@ def displayYear(request, year=None):
 def displayDay(request, year=None, month=None, day=None):
     # TODO
     pass
+
+
+################################################################################
+@login_required
+def exportData(request):
+    import csv
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="schedule.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Client', 'Visit', 'Notes'])
+
+    for client in Client.objects.all():
+        writer.writerow([client.name, None, client.note])
+        for visit in Visit.objects.filter(client=client):
+            writer.writerow(['', visit.date, visit.note])
+    return response
+
+
+################################################################################
+@login_required
+def clientReport(request):
+    d = {}
+    d['clients'] = Client.objects.all()
+    return render(request, "report/customer_report.html", d)
 
 # EOF

@@ -1,6 +1,8 @@
 <div class="panel-body">
-    <a href="{% url 'visitDetail' visit.id %}">{{visit.date}}</a> {% if visit.good %} &nbsp; {% else %} <font color="red">Couldn't fit </font> {% endif %}
-    {% if visit.note %}
-        {{visit.note}}
-    {% endif %}
+    <a class="list-group-item" href="{% url 'visitDetail' visit.id %}">{{visit.date}}
+        {% if visit.note %}
+            &nbsp; <span class="glyphicon glyphicon-file"></span>
+            &nbsp; {{visit.note}}
+        {% endif %}
+    </a>
 </div>
