@@ -10,19 +10,27 @@ class Gap(models.Model):
     desc = models.CharField(max_length=250)
     start = models.DateField()
     end = models.DateField()
+    recurring = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['desc']
 
     ############################################################################
     def __str__(self):
-        return "%s: %s to %s" % (self.desc, self.start, self.end)
+        recur = ' (Recurring)' if self.recurring else ''
+        return "%s: %s to %s%s" % (self.desc, self.start, self.end, recur)
 
     ############################################################################
     def inGap(self, d):
         """ Is the date specified in the gap? """
         if d >= self.start and d <= self.end:
             return True
+        if self.recurring:
+            year = d.year
+            mod_start = self.start.replace(year=year)
+            mod_end = self.end.replace(year=year)
+            if d >= mod_start and d <= mod_end:
+                return True
         return False
 
 

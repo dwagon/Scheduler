@@ -2,7 +2,7 @@
 {% block gap_content %}
 <ul class="list-group">
 {% for gap in gap_list %}
-    <li class="list-group-item"><a href="{% url 'gapDetail' gap.id %}">{{ gap.desc }} ({{gap.start}} - {{gap.end}})</a></li>
+    <li class="list-group-item"><a href="{% url 'gapDetail' gap.id %}">{{ gap.desc }} ({{gap.start}} - {{gap.end}} {% if gap.recurring %} Recurring {% endif %})</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

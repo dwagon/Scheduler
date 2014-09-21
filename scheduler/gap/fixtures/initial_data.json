@@ -1,4 +1,4 @@
 [
-{"fields": { "start": "2014-12-25", "end": "2014-12-25", "desc": "Christmas"}, "pk": 1, "model": "gap.gap"},
-{"fields": { "start": "2014-12-26", "end": "2014-12-26", "desc": "Boxing Day"}, "pk": 2, "model": "gap.gap"}
+{"fields": { "start": "2014-12-25", "end": "2014-12-25", "desc": "Christmas", "recurring": "True"}, "pk": 1, "model": "gap.gap"},
+{"fields": { "start": "2014-12-26", "end": "2014-12-26", "desc": "Boxing Day", "recurring": "True"}, "pk": 2, "model": "gap.gap"}
 ]
