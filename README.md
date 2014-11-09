@@ -6,6 +6,10 @@ System to allow scheduling of multiple clients
 CHANGELOG
 =========
 
+Release 0.6
+-----------
+* Gaps can now be marked as occuring every year
+
 Release 0.5
 -----------
 * Added customer reports

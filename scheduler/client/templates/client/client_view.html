@@ -3,7 +3,7 @@
     <div class="panel-body">
     Every {{client.regularity}} weeks
     {{client.get_dayofweek_display}} 
-    for {{client.get_duration_display}} 
+    for {{client.duration}} hours
     <br>
     {% if client.startdate or client.enddate %}
         Date Range: {{client.daterange}}

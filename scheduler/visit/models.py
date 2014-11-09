@@ -11,7 +11,7 @@ from gap.models import inGap
 ################################################################################
 class Visit(models.Model):
     client = models.ForeignKey(Client)
-    good = models.BooleanField(default=True)
+    attn = models.BooleanField("Attention Required", default=False)
     date = models.DateField()
     note = models.CharField(max_length=250, blank=True)
 
@@ -78,13 +78,13 @@ def makeVisits(client, startDate, endDate):
         if canFit(d, client.duration):
             v = newVisit(client, d)
             if inGap(d):
-                v.good = False
+                v.attn = True
                 v.note = "Originally on %s (%s)" % (d, inGap(d))
                 v.save()
             if firstVisit:
                 firstVisit = False
             elif daysSince > clientRegularity:
-                v.good = False
+                v.attn = True
                 v.save()
                 msgs.append("Visit on %s - %s days since last (meant to be %s days)" % (d, daysSince.days, clientRegularity.days))
             lastdate = v.date

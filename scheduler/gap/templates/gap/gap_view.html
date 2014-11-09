@@ -2,6 +2,9 @@
     <div class="panel-heading">{{gap.desc}}</div>
     <div class="panel-body">
         {{gap.start}} - {{gap.end}}
+        {% if gap.recurring %}
+            Recurring
+        {% endif %}
     </div>
     <div class="row">
         <div class="col-md-3">
