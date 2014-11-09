@@ -8,7 +8,7 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <a href="{% url 'clientDetail' visit.client.id %}">{{visit.client}}</a>
-                        ({{visit.client.get_duration_display}})
+                        ({{visit.client.duration}} hours)
                         Date: {{visit.date}}
                     </div>
                     <div class="panel-body">

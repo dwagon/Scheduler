@@ -58,7 +58,7 @@
                             {% endif %}
                         >
                             <a href="{% url "clientDetail" visit.client.id %}"><b>{{ visit.client.name }}</b></a>:
-                            <a href="{% url "visitDetail" visit.id %}">{{visit.client.get_duration_display }} {% if visit.note %} <span class="glyphicon glyphicon-file"></span> {% endif %}</a>
+                            <a href="{% url "visitDetail" visit.id %}">{{visit.client.duration}} hours {% if visit.note %} <span class="glyphicon glyphicon-file"></span> {% endif %}</a>
                             </font>
                         </td>
                     </tr>
