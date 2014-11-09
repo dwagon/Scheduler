@@ -6,12 +6,12 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
 from .models import Visit
-from .forms import VisitForm
+from .forms import VisitForm, VisitNewForm
 from scheduler.views import LoginRequiredMixin
 from client.models import Client
 from report.reports import monthDetail
 
-mnames = "January February March April May June July August September October November December".split()
+import sys
 
 
 ################################################################################
@@ -56,8 +56,24 @@ class VisitDelete(LoginRequiredMixin, DeleteView):
 
 ################################################################################
 class VisitNew(LoginRequiredMixin, CreateView):
+    fields = ['date', 'note']
     model = Visit
-    success_url = reverse_lazy('visitDetail')
+    form_class = VisitNewForm
+
+    def get_success_url(self):
+        return reverse_lazy('clientDetail', kwargs={'pk': self.kwargs.get('clientid')})
+
+    def get_form_kwargs(self):
+        kwargs = super(VisitNew, self).get_form_kwargs()
+        kwargs['initial']['client'] = Client.objects.get(id=self.kwargs.get('clientid'))
+        sys.stderr.write("kwargs=%s\n" % kwargs)
+        return kwargs
+
+    def get_initial(self, *args, **kwargs):
+        initial = super(VisitNew, self).get_initial()
+        initial['client'] = Client.objects.get(id=self.kwargs.get('clientid'))
+        sys.stderr.write("initial=%s\n" % initial)
+        return initial
 
 
 ################################################################################
