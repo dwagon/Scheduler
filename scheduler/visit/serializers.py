@@ -5,7 +5,7 @@ from rest_framework import serializers
 class VisitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visit
-        fields = ('client', 'good', 'date', 'note')
+        fields = ('client', 'attn', 'date', 'note')
 
 
 # EOF

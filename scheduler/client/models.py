@@ -5,10 +5,6 @@ DOW_CHOICES = (
     (0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'),
     (4, 'Friday'), (5, 'Saturday'), (6, 'Sunday'), (7, 'Anyday'))
 
-DUR_CHOICES = (
-    (0, 'Unknown'), (1, 'Hour'), (2, '1/4 Day'), (3, '1/3 Day'),
-    (4, '1/2 Day'), (9, 'Full Day'))
-
 
 ################################################################################
 ################################################################################
@@ -17,7 +13,7 @@ class Client(models.Model):
     name = models.CharField(max_length=200, unique=True)
     regularity = models.PositiveSmallIntegerField(help_text="How many weeks between visits")
     dayofweek = models.SmallIntegerField(choices=DOW_CHOICES)
-    duration = models.SmallIntegerField(choices=DUR_CHOICES)
+    duration = models.SmallIntegerField(default=0, help_text="Number of hours per visit")
     note = models.CharField(max_length=250, blank=True)
     flexible = models.BooleanField(default=False)   # Legacy
     startdate = models.DateField(null=True, default=None, help_text="Schedule visits from this date (YYYY-MM-DD)")
