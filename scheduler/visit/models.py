@@ -18,6 +18,14 @@ class Visit(models.Model):
     def __str__(self):
         return "Visit %s on %s" % (self.client, self.date)
 
+    def save(self, *args, **kwargs):
+        if self.id:
+            oldobj = Visit.objects.get(id=self.id)
+            if oldobj.date != self.date:
+                self.attn = True
+                self.note += "[Moved from %s]" % oldobj.date
+        super(Visit, self).save(*args, **kwargs)
+
     class Meta:
         unique_together = (("client", "date"))
         ordering = ['date']
