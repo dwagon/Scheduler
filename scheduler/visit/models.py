@@ -18,6 +18,14 @@ class Visit(models.Model):
     def __str__(self):
         return "Visit %s on %s" % (self.client, self.date)
 
+    def save(self, *args, **kwargs):
+        if self.id:
+            oldobj = Visit.objects.get(id=self.id)
+            if oldobj.date != self.date:
+                self.attn = True
+                self.note += "[Moved from %s]" % oldobj.date
+        super(Visit, self).save(*args, **kwargs)
+
     class Meta:
         unique_together = (("client", "date"))
         ordering = ['date']
@@ -50,45 +58,44 @@ def isWeekend(d):
 ################################################################################
 def canFit(dt, dur):
     visits = Visit.objects.filter(date=dt)
-    capacity = 9    # Hours in the day
+    capacity = 8
     for v in visits:
         capacity -= v.client.duration
-        # capacity -= 1   # Allow for travel
     return capacity >= dur
 
 
 ################################################################################
 def makeVisits(client, startDate, endDate):
     msgs = []
-    d = startDate
-    d -= datetime.timedelta(days=1)
-    clientRegularity = datetime.timedelta(days=7*client.regularity)
-    lastdate = datetime.date(year=1990, month=1, day=1)
-    firstVisit = True
-    while d < endDate:
+    d = startDate - datetime.timedelta(days=1)
+    # Find the first real start day
+    for i in range(7 * client.regularity):
         d += datetime.timedelta(days=1)
-        # Skip weekends
-        if d.isoweekday() in (6, 7):
-            continue
-        if not client.goodDay(d):
-            continue
-        daysSince = d - lastdate
-        if daysSince < clientRegularity:
-            continue
-        if canFit(d, client.duration):
-            v = newVisit(client, d)
-            if inGap(d):
-                v.attn = True
-                v.note = "Originally on %s (%s)" % (d, inGap(d))
-                v.save()
-            if firstVisit:
-                firstVisit = False
-            elif daysSince > clientRegularity:
-                v.attn = True
-                v.save()
-                msgs.append("Visit on %s - %s days since last (meant to be %s days)" % (d, daysSince.days, clientRegularity.days))
-            lastdate = v.date
-            continue
+        if client.goodDay(d) and canFit(d, client.duration):
+            break
+    else:
+        # If we can't fit we may as well try and be on the right DoW
+        d = startDate - datetime.timedelta(days=1)
+        for i in range(7):
+            d += datetime.timedelta(days=1)
+            if client.goodDay(d):
+                break
+
+    clientRegularity = datetime.timedelta(days=7*client.regularity)
+    while d < endDate:
+        attn = False
+        note = ''
+        if inGap(d):
+            attn = True
+            note = "Originally on %s (%s)" % (d, inGap(d))
+        if not canFit(d, client.duration):
+            attn = True
+            note = "Can't fit into %s" % d
+        v = newVisit(client, d)
+        v.attn = attn
+        v.note = note
+        v.save()
+        d += clientRegularity
 
     return msgs
 
