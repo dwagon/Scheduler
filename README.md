@@ -9,6 +9,8 @@ CHANGELOG
 Release 0.6
 -----------
 * Gaps can now be marked as occuring every year
+* Change visit scheduling to mark as unfit rather than try and fit
+* Change visits to hours rather than fractions of days
 
 Release 0.5
 -----------
