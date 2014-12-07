@@ -44,4 +44,10 @@ def inGap(dt):
             return gp
     return None
 
+
+################################################################################
+def clearGaps():
+    for g in Gap.objects.all():
+        g.delete()
+
 # EOF

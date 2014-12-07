@@ -2,7 +2,7 @@ from django.views import generic
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Gap
 from .forms import GapForm
@@ -44,5 +44,13 @@ class GapNew(LoginRequiredMixin, CreateView):
 @login_required
 def gapIndex(request):
     return render(request, 'gap/gap_index.html', {})
+
+
+################################################################################
+@login_required
+def clearAllGaps(request):
+    from .models import clearGaps
+    clearGaps()
+    return redirect("index")
 
 # EOF
