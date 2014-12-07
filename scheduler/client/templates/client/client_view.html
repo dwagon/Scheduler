@@ -14,17 +14,25 @@
 {% endif %}
 <div class="row">
     <div class="col-md-3">
-        <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm">Edit</a>
+        <a href="{%url 'clientUpdate' client.id %}" type="button" class="btn btn-primary btn-sm">Edit Client</a>
+    </div>
+    <div class="col-md-6">
     </div>
     <div class="col-md-3">
-        <a href="{%url 'clientGenerateVisits' client.id %}" type="button" class="btn btn-primary btn-sm">Make Visits</a>
+        <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-danger btn-sm">Delete Client</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <a href="{% url 'visitNew' client.id %}" type="button" class="btn btn-primary btn-sm">New Visit</a>
     </div>
     <div class="col-md-3">
-        <a href="{%url 'clientDeleteVisits' client.id %}" type="button" class="btn btn-warning btn-sm">Nuke visits</a>
+        <a href="{%url 'clientGenerateVisits' client.id %}" type="button" class="btn btn-primary btn-sm">AutoScheduler Visits</a>
     </div>
-    <div class="col-md-1"></div>
-    <div class="col-md-2">
-        <a href="{%url 'clientDelete' client.id %}" type="button" class="btn btn-danger btn-sm">Delete</a>
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-3">
+        <a href="{%url 'clientDeleteVisits' client.id %}" type="button" class="btn btn-warning btn-sm">Nuke all visits</a>
     </div>
 </div>
 </div>

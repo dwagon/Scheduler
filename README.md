@@ -6,6 +6,11 @@ System to allow scheduling of multiple clients
 CHANGELOG
 =========
 
+Release 0.7
+-----------
+* You can now delete all gaps
+* Can create single visits
+
 Release 0.6
 -----------
 * Gaps can now be marked as occuring every year
