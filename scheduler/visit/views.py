@@ -11,8 +11,6 @@ from scheduler.views import LoginRequiredMixin
 from client.models import Client
 from report.reports import monthDetail
 
-import sys
-
 
 ################################################################################
 class VisitList(LoginRequiredMixin, generic.ListView):
@@ -66,13 +64,11 @@ class VisitNew(LoginRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super(VisitNew, self).get_form_kwargs()
         kwargs['initial']['client'] = Client.objects.get(id=self.kwargs.get('clientid'))
-        sys.stderr.write("kwargs=%s\n" % kwargs)
         return kwargs
 
     def get_initial(self, *args, **kwargs):
         initial = super(VisitNew, self).get_initial()
         initial['client'] = Client.objects.get(id=self.kwargs.get('clientid'))
-        sys.stderr.write("initial=%s\n" % initial)
         return initial
 
 
