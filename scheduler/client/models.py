@@ -58,8 +58,11 @@ class Client(models.Model):
         if self.enddate:
             end = self.enddate
         else:
-            end = datetime.date(today.year, 12, 31)
-        msgs = makeVisits(self, start, end)
+            end = datetime.date(today.year+1, 12, 31)
+        if self.regularity != 0:
+            msgs = makeVisits(self, start, end)
+        else:
+            msgs = []
         return msgs
 
 # EOF
